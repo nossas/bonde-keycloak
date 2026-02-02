@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap');
+
+:root {
+    --pf-v5-global--FontFamily--text: 'Funnel Display', sans-serif;
+    --pf-v5-global--FontFamily--heading: 'Funnel Display', sans-serif;
+
+    --pf-v5-global--primary-color--100: #ffba00;
+    --pf-v5-global--primary-color--200: #cb9705;
+}
+
+/* .pf-v5-c-button {
+    --pf-v5-c-button--m-primary--Color: var(--pf-v5-global--Color--dark-100);
+    --pf-v5-c-button--m-primary--focus--Color: var(--pf-v5-global--Color--dark-100);
+    --pf-v5-c-button--m-primary--hover--Color: var(--pf-v5-global--Color--dark-100);
+    --pf-v5-c-button--m-primary--active--Color: var(--pf-v5-global--Color--dark-100);
+}
+
+.pf-v5-c-login__container {
+    font-family: Funnel Display;
+    grid-template-areas: "main";
+    grid-template-columns: 34rem;
+}
+
+#kc-header-wrapper {
+    padding: 62px 10px 20px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.login-pf body {
+    background: url("../img/keycloak-bg.png") no-repeat center center fixed;
+    background-size: cover;
+    height: 100%;
+}
+
+div.kc-logo-text {
+    background-image: url(../img/bonde-logo-text.png);
+    background-repeat: no-repeat;
+    height: 70px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+div.kc-logo-text span {
+    display: none;
+} */
+
