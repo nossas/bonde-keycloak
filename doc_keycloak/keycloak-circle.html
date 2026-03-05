@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keycloak × Circle.so — Documentação</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+
+:root {
+  --bg: #080c14;
+  --bg2: #0d1420;
+  --bg3: #121a2b;
+  --card: #141c2e;
+  --card2: #1a2438;
+  --border: #1f2d47;
+  --border2: #243352;
+  --accent: #4f7fff;
+  --accent2: #7c5cfc;
+  --accent3: #00d4aa;
+  --warn: #f5a623;
+  --danger: #ff5c5c;
+  --text: #e2e8f8;
+  --text2: #8fa3c8;
+  --text3: #4d6082;
+  --code-bg: #0a1020;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 64px 60px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(79,127,255,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: 200px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(124,92,252,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  color: var(--text2);
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+.hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.htag {
+  background: rgba(79,127,255,0.1);
+  border: 1px solid rgba(79,127,255,0.25);
+  color: #7aa3ff;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 32px 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.sidebar-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 24px 0 10px;
+  padding: 0 8px;
+}
+.sidebar-label:first-child { margin-top: 0; }
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 13.5px;
+  transition: all 0.15s;
+  margin-bottom: 2px;
+}
+.sidebar a:hover { background: var(--card); color: var(--text); }
+.sidebar a .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border2);
+  flex-shrink: 0;
+}
+.sidebar a:hover .dot { background: var(--accent); }
+
+/* ── MAIN ── */
+.main { padding: 48px 56px; max-width: 900px; }
+
+/* ── SECTIONS ── */
+.section { margin-bottom: 72px; }
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(79,127,255,0.1);
+  border: 1px solid rgba(79,127,255,0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #c8d8ff;
+  margin: 32px 0 12px;
+}
+h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text2);
+  margin: 20px 0 8px;
+  letter-spacing: 0.3px;
+}
+p { color: var(--text2); margin-bottom: 12px; }
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { color: var(--text2); margin-bottom: 6px; line-height: 1.65; }
+strong { color: var(--text); font-weight: 500; }
+em { color: var(--accent3); font-style: normal; font-weight: 500; }
+
+/* ── CODE ── */
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  margin: 16px 0 20px;
+  position: relative;
+}
+pre::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 10px; right: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #a8c4ff;
+  line-height: 1.65;
+}
+:not(pre) > code {
+  background: rgba(79,127,255,0.12);
+  color: #7aa3ff;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 12.5px;
+}
+
+/* syntax highlight helpers */
+.kw { color: #c084fc; }
+.fn { color: #60a5fa; }
+.str { color: #86efac; }
+.cm { color: #4d6082; font-style: italic; }
+.num { color: #fb923c; }
+.prop { color: #7dd3fc; }
+
+/* ── CALLOUTS ── */
+.callout {
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  font-size: 14px;
+}
+.callout-blue  { background: rgba(79,127,255,0.08); border: 1px solid rgba(79,127,255,0.2); }
+.callout-green { background: rgba(0,212,170,0.07); border: 1px solid rgba(0,212,170,0.2); }
+.callout-warn  { background: rgba(245,166,35,0.07); border: 1px solid rgba(245,166,35,0.2); }
+.callout-red   { background: rgba(255,92,92,0.07); border: 1px solid rgba(255,92,92,0.2); }
+.callout-icon  { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.callout p     { margin: 0; color: var(--text2); }
+.callout strong { display: block; margin-bottom: 4px; color: var(--text); }
+
+/* ── TABLES ── */
+table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 13.5px; }
+th {
+  background: var(--card2);
+  color: var(--text);
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border2);
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+
+/* ── CARDS GRID ── */
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border2); }
+.card-icon { font-size: 1.5rem; margin-bottom: 12px; }
+.card h4 { margin: 0 0 8px; color: var(--text); font-size: 0.95rem; }
+.card p  { margin: 0; font-size: 13.5px; }
+
+/* ── IDEA CARDS ── */
+.idea-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent2);
+  border-radius: 0 12px 12px 0;
+  padding: 20px 24px;
+  margin: 20px 0;
+}
+.idea-card.green { border-left-color: var(--accent3); }
+.idea-card.warn  { border-left-color: var(--warn); }
+.idea-card-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.idea-card-title .badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  background: rgba(124,92,252,0.2);
+  color: #a78bfa;
+  border: 1px solid rgba(124,92,252,0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.idea-card.green .badge { background: rgba(0,212,170,0.15); color: #34d399; border-color: rgba(0,212,170,0.25); }
+
+/* ── FLOW ── */
+.flow {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+}
+.flow-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.flow-row:last-child { margin-bottom: 0; }
+.flow-n {
+  width: 28px; height: 28px;
+  background: rgba(79,127,255,0.15);
+  border: 1px solid rgba(79,127,255,0.25);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.flow-row span { font-size: 13.5px; color: var(--text2); }
+.flow-arrow { color: var(--border2); margin: 2px 0 2px 6px; font-size: 1rem; }
+
+/* ── TAG PILLS ── */
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.3px;
+}
+.pill-blue   { background: rgba(79,127,255,0.15); color: #7aa3ff; }
+.pill-green  { background: rgba(0,212,170,0.12); color: #34d399; }
+.pill-purple { background: rgba(124,92,252,0.15); color: #c084fc; }
+.pill-warn   { background: rgba(245,166,35,0.12); color: #fbbf24; }
+
+/* ── SECTION DIVIDER ── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 60px 0;
+}
+
+/* ── DIAGRAM ── */
+.diagram {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.diag-box {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  text-align: center;
+  min-width: 130px;
+}
+.diag-box .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.diag-box .name {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.diag-arrow {
+  font-size: 1.2rem;
+  color: var(--border2);
+  margin: 0 12px;
+  flex-shrink: 0;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">// documentação técnica — Bonde</div>
+  <h1>Keycloak × Circle.so<br>Guia Completo</h1>
+  <p class="hero-sub">Tudo que você pode construir: customização de UI com React, Account Console personalizado, integração profunda com a API do Circle.so e ideias práticas para plataforma de cursos.</p>
+  <div class="hero-tags">
+    <span class="htag">Keycloakify</span>
+    <span class="htag">@keycloak/keycloak-account-ui</span>
+    <span class="htag">Circle Headless API</span>
+    <span class="htag">OAuth 2.0 / OIDC</span>
+    <span class="htag">React + PatternFly</span>
+    <span class="htag">JWT</span>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-label">Fundamentos</div>
+  <a href="#visao"><span class="dot"></span>Arquitetura Geral</a>
+  <a href="#sso"><span class="dot"></span>SSO Circle + Keycloak</a>
+
+  <div class="sidebar-label">Customização Login</div>
+  <a href="#keycloakify"><span class="dot"></span>Keycloakify + React</a>
+  <a href="#css"><span class="dot"></span>Temas CSS / Aparência</a>
+  <a href="#campos"><span class="dot"></span>Campos Customizados</a>
+  <a href="#i18n"><span class="dot"></span>Textos e Traduções</a>
+
+  <div class="sidebar-label">Account Console</div>
+  <a href="#account-intro"><span class="dot"></span>O que é possível</a>
+  <a href="#nova-aba"><span class="dot"></span>Criando novas abas</a>
+  <a href="#aba-cursos"><span class="dot"></span>Aba: Meus Cursos</a>
+  <a href="#aba-assinatura"><span class="dot"></span>Aba: Assinatura</a>
+  <a href="#aba-progresso"><span class="dot"></span>Aba: Progresso</a>
+  <a href="#aba-notif"><span class="dot"></span>Aba: Notificações</a>
+
+  <div class="sidebar-label">Circle.so API</div>
+  <a href="#circle-api"><span class="dot"></span>APIs disponíveis</a>
+  <a href="#headless"><span class="dot"></span>Headless API</a>
+  <a href="#bridge"><span class="dot"></span>Ponte KC ↔ Circle</a>
+
+  <div class="sidebar-label">Ideias para Cursos</div>
+  <a href="#ideias"><span class="dot"></span>Possibilidades criativas</a>
+
+  <div class="sidebar-label">Referência</div>
+  <a href="#checklist"><span class="dot"></span>Checklist de build</a>
+</nav>
+
+<main class="main">
+
+<!-- ════════════════════════════════════════════
+     1. ARQUITETURA GERAL
+════════════════════════════════════════════ -->
+<section class="section" id="visao">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Arquitetura Geral</h2>
+  </div>
+
+  <p>A combinação de Keycloak e Circle.so forma uma plataforma completa onde o Keycloak é a <em>central de identidade</em> e o Circle.so é o <em>núcleo da comunidade e dos cursos</em>. O usuário só existe em um lugar: o Keycloak. O Circle.so é apenas um cliente SSO.</p>
+
+  <div class="diagram">
+    <div class="diag-box">
+      <div class="label">Usuário</div>
+      <div class="name">Browser</div>
+    </div>
+    <div class="diag-arrow">→</div>
+    <div class="diag-box">
+      <div class="label">IdP</div>
+      <div class="name">Keycloak</div>
+    </div>
+    <div class="diag-arrow">→</div>
+    <div class="diag-box">
+      <div class="label">Comunidade</div>
+      <div class="name">Circle.so</div>
+    </div>
+    <div class="diag-arrow">↔</div>
+    <div class="diag-box">
+      <div class="label">Automação</div>
+      <div class="name">Backend/API</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🔐</div>
+      <h4>Keycloak gerencia</h4>
+      <p>Login, registro, MFA, perfil do usuário, roles/grupos, sessões, senhas, Social Login, LDAP/AD</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏫</div>
+      <h4>Circle.so gerencia</h4>
+      <p>Cursos, posts, feed, comentários, eventos, notificações, chat, diretório de membros, espaços</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h4>Keycloakify customiza</h4>
+      <p>Login page, registro, MFA, reset de senha — com React e qualquer design system</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎛️</div>
+      <h4>Account Console customiza</h4>
+      <p>Portal do usuário com abas customizadas: cursos, progresso, assinatura — tudo integrado via API</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     2. SSO
+════════════════════════════════════════════ -->
+<section class="section" id="sso">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>SSO Circle.so + Keycloak</h2>
+  </div>
+
+  <p>O Circle.so implementa SSO via OAuth 2.0 customizado. Você fornece três endpoints do Keycloak e configura os campos que o Circle deve ler do <code>userinfo</code>. A partir daí, o Keycloak é o único responsável por autenticar o usuário.</p>
+
+  <h3>Configuração mínima no Circle.so</h3>
+  <table>
+    <thead><tr><th>Campo</th><th>Valor (Keycloak)</th></tr></thead>
+    <tbody>
+      <tr><td>Authorization URL</td><td><code>/realms/{realm}/protocol/openid-connect/auth</code></td></tr>
+      <tr><td>Token Fetch URL</td><td><code>/realms/{realm}/protocol/openid-connect/token</code></td></tr>
+      <tr><td>User Info URL</td><td><code>/realms/{realm}/protocol/openid-connect/userinfo</code></td></tr>
+      <tr><td>SSO ID path</td><td><code>sub</code></td></tr>
+      <tr><td>Email path</td><td><code>email</code></td></tr>
+      <tr><td>Name path</td><td><code>name</code></td></tr>
+      <tr><td>Avatar path</td><td><code>picture</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <div>
+      <strong>Plano necessário</strong>
+      <p>SSO customizado e Circle API (incluindo Headless) estão disponíveis apenas nos planos <strong>Business e Enterprise</strong> do Circle.so.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     3. KEYCLOAKIFY
+════════════════════════════════════════════ -->
+<section class="section" id="keycloakify">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Keycloakify + React</h2>
+  </div>
+
+  <p>O <strong>Keycloakify</strong> compila um projeto React em um arquivo <code>.jar</code> que o Keycloak carrega como tema. Você tem controle total sobre cada página de autenticação usando componentes React, hooks, TypeScript e qualquer biblioteca de UI.</p>
+
+  <h3>Setup do projeto</h3>
+  <pre data-lang="bash"><code><span class="cm"># Clonar o starter oficial</span>
+git clone https://github.com/keycloakify/keycloakify-starter.git
+cd keycloakify-starter
+yarn install
+
+<span class="cm"># Adicionar Storybook para desenvolvimento com hot-reload</span>
+<span class="cm"># (sem precisar de Keycloak rodando localmente)</span>
+npx keycloakify add-story   <span class="cm"># selecione: login.tsx</span>
+npx keycloakify add-story   <span class="cm"># selecione: register.tsx</span>
+npm run storybook
+
+<span class="cm"># Build do tema (.jar)</span>
+npm run build-keycloak-theme
+<span class="cm"># Saída: dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar</span></code></pre>
+
+  <h3>Estrutura do projeto</h3>
+  <pre data-lang="text"><code>src/
+├── login/
+│   ├── KcPage.tsx              <span class="cm"># entry point, roteador de páginas</span>
+│   ├── pages/
+│   │   ├── Login.tsx           <span class="cm"># tela de login</span>
+│   │   ├── Register.tsx        <span class="cm"># tela de cadastro</span>
+│   │   ├── LoginOtp.tsx        <span class="cm"># tela de MFA/OTP</span>
+│   │   ├── LoginResetPassword.tsx
+│   │   └── UserProfileFormFields.tsx  <span class="cm"># campos do formulário</span>
+│   └── styles/
+│       └── custom.css
+└── account/                    <span class="cm"># Account Console (ver seção 05)</span></code></pre>
+
+  <h3>Deploy via Docker</h3>
+  <pre data-lang="dockerfile"><code>FROM quay.io/keycloak/keycloak:latest
+
+<span class="cm"># Copia o .jar do tema para a pasta de providers</span>
+COPY dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar \
+     /opt/keycloak/providers/meu-tema.jar
+
+<span class="cm"># Ativa build do servidor com o novo tema</span>
+RUN /opt/keycloak/bin/kc.sh build
+
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start"]</code></pre>
+
+  <div class="callout callout-blue">
+    <span class="callout-icon">ℹ️</span>
+    <div>
+      <strong>Compatibilidade</strong>
+      <p>Temas gerados pelo Keycloakify funcionam a partir do Keycloak 11 e são testados para compatibilidade com versões futuras via Storybook — sem precisar de uma instância Keycloak para desenvolver.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     4. CSS / APARÊNCIA
+════════════════════════════════════════════ -->
+<section class="section" id="css">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Temas CSS — Aparência Visual</h2>
+  </div>
+
+  <p>Para mudanças de aparência sem reescrever o HTML, use CSS sobre o tema base. O Keycloak usa o design system <strong>PatternFly</strong>, que expõe variáveis CSS globais — qualquer valor mudado aqui propaga para toda a UI.</p>
+
+  <h3>Variáveis PatternFly — o que você pode controlar</h3>
+  <pre data-lang="css"><code><span class="cm">/* src/login/styles/custom.css */</span>
+
+body {
+  <span class="cm">/* Tipografia */</span>
+  --pf-global--FontFamily--sans-serif: 'Syne', sans-serif;
+  --pf-global--FontFamily--heading--sans-serif: 'Syne', sans-serif;
+
+  <span class="cm">/* Cores do tema */</span>
+  --pf-global--BackgroundColor--dark-100: #0f1729;
+  --pf-global--Color--100: #e2e8f8;
+  --pf-global--primary-color--100: #4f7fff;
+  --pf-global--link--Color: #7aa3ff;
+
+  <span class="cm">/* Fundo da página de login */</span>
+  background: linear-gradient(135deg, #080c14 0%, #0d1420 100%);
+  background-image: url('/resources/meu-realm/login/img/background.svg');
+}
+
+<span class="cm">/* ── Logo ── */</span>
+#kc-logo-wrapper {
+  background-image: url('/resources/meu-realm/login/img/logo.svg') !important;
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 52px;
+  width: 180px;
+  margin: 0 auto 24px;
+}
+
+<span class="cm">/* ── Card central de login ── */</span>
+#kc-container-wrapper,
+.card-pf {
+  background: rgba(20, 28, 46, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(79, 127, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+<span class="cm">/* ── Inputs ── */</span>
+.pf-c-form-control {
+  background: rgba(8, 12, 20, 0.8) !important;
+  border-color: #1f2d47 !important;
+  color: #e2e8f8 !important;
+  border-radius: 8px !important;
+  height: 44px;
+  transition: border-color 0.2s;
+}
+.pf-c-form-control:focus {
+  border-color: #4f7fff !important;
+  box-shadow: 0 0 0 3px rgba(79,127,255,0.15) !important;
+}
+
+<span class="cm">/* ── Botão primário (Entrar) ── */</span>
+#kc-login, .pf-c-button.pf-m-primary {
+  background: linear-gradient(135deg, #4f7fff 0%, #7c5cfc 100%) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+  height: 44px;
+  font-size: 15px;
+  transition: opacity 0.2s, transform 0.15s;
+}
+#kc-login:hover { opacity: 0.88; transform: translateY(-1px); }
+
+<span class="cm">/* ── Botão social (Google, GitHub) ── */</span>
+.pf-c-button.pf-m-secondary {
+  background: rgba(20,28,46,0.8) !important;
+  border-color: #1f2d47 !important;
+  color: #8fa3c8 !important;
+  border-radius: 8px !important;
+}
+
+<span class="cm">/* ── Links ── */</span>
+a, .login-pf a { color: #7aa3ff !important; }
+a:hover { color: #a0bfff !important; }</code></pre>
+
+  <h3>Importar fontes Google no tema</h3>
+  <pre data-lang="properties"><code><span class="cm"># themes/meu-tema/login/theme.properties</span>
+parent=keycloak
+
+<span class="cm"># Importar fonte externa antes dos estilos</span>
+stylesCommon=https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@400;500&display=swap
+
+<span class="cm"># Seus estilos customizados (após os do tema pai)</span>
+styles=css/custom.css</code></pre>
+</section>
+
+<!-- ════════════════════════════════════════════
+     5. CAMPOS CUSTOMIZADOS
+════════════════════════════════════════════ -->
+<section class="section" id="campos">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Campos Customizados no Cadastro</h2>
+  </div>
+
+  <p>Há duas formas de adicionar campos ao formulário de registro: via <strong>User Profile</strong> (sem código, via Admin Console) ou via <strong>Keycloakify</strong> (com React, para controle total).</p>
+
+  <h3>Via User Profile — Admin Console (sem código)</h3>
+  <p>No Admin Console: <code>Realm Settings → User Profile → Create attribute</code></p>
+
+  <table>
+    <thead><tr><th>Tipo</th><th>Input Type</th><th>Quando usar</th></tr></thead>
+    <tbody>
+      <tr><td>Texto livre</td><td><code>text</code></td><td>Nome, empresa, cargo</td></tr>
+      <tr><td>Lista suspensa</td><td><code>select</code></td><td>Plano, segmento, país</td></tr>
+      <tr><td>Múltipla escolha</td><td><code>multiselect</code></td><td>Áreas de interesse</td></tr>
+      <tr><td>Caixa de texto</td><td><code>textarea</code></td><td>Bio, descrição</td></tr>
+      <tr><td>Data</td><td><code>html5-date</code></td><td>Data de nascimento</td></tr>
+      <tr><td>Checkbox</td><td><code>html5-checkbox</code></td><td>Aceite de termos, newsletter</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Ejetando e customizando campos com React</h3>
+  <pre data-lang="bash"><code><span class="cm"># Ejetar o componente de campos do formulário</span>
+npx keycloakify eject-page
+<span class="cm"># Selecione: UserProfileFormFields.tsx</span></code></pre>
+
+  <pre data-lang="tsx"><code><span class="cm">// src/login/pages/UserProfileFormFields.tsx</span>
+<span class="cm">// Renderização customizada para cada tipo de campo</span>
+
+<span class="kw">import</span> { <span class="fn">useFormContext</span> } <span class="kw">from</span> <span class="str">"keycloakify/login"</span>;
+
+<span class="kw">export function</span> <span class="fn">UserProfileFormFields</span>({ kcContext, i18n }) {
+  <span class="kw">const</span> { profile } = kcContext;
+  <span class="kw">const</span> { register, watch } = <span class="fn">useFormContext</span>();
+
+  <span class="kw">return</span> (
+    &lt;&gt;
+      {profile.attributes.<span class="fn">map</span>(attr =&gt; {
+        <span class="kw">const</span> type = attr.annotations?.inputType;
+
+        <span class="cm">/* ── SELECT com opções ── */</span>
+        <span class="kw">if</span> (type === <span class="str">"select"</span>) <span class="kw">return</span> (
+          &lt;div key={attr.name} className=<span class="str">"field-group"</span>&gt;
+            &lt;label className=<span class="str">"field-label"</span>&gt;{attr.displayName}&lt;/label&gt;
+            &lt;select {...<span class="fn">register</span>(attr.name)} className=<span class="str">"field-select"</span>&gt;
+              &lt;option value=<span class="str">""</span>&gt;Selecione...&lt;/option&gt;
+              {attr.validators?.options?.options?.<span class="fn">map</span>(opt =&gt; (
+                &lt;option key={opt} value={opt}&gt;{opt}&lt;/option&gt;
+              ))}
+            &lt;/select&gt;
+          &lt;/div&gt;
+        );
+
+        <span class="cm">/* ── MULTISELECT com checkboxes visuais ── */</span>
+        <span class="kw">if</span> (type === <span class="str">"multiselect"</span>) <span class="kw">return</span> (
+          &lt;div key={attr.name} className=<span class="str">"field-group"</span>&gt;
+            &lt;label className=<span class="str">"field-label"</span>&gt;{attr.displayName}&lt;/label&gt;
+            &lt;div className=<span class="str">"checkbox-grid"</span>&gt;
+              {attr.validators?.options?.options?.<span class="fn">map</span>(opt =&gt; (
+                &lt;label key={opt} className=<span class="str">`checkbox-item ${watch(attr.name)?.includes(opt) ? 'active' : ''}`</span>&gt;
+                  &lt;input type=<span class="str">"checkbox"</span> value={opt} {...<span class="fn">register</span>(attr.name)} /&gt;
+                  {opt}
+                &lt;/label&gt;
+              ))}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        );
+
+        <span class="cm">/* ── TEXTO padrão ── */</span>
+        <span class="kw">return</span> (
+          &lt;div key={attr.name} className=<span class="str">"field-group"</span>&gt;
+            &lt;label className=<span class="str">"field-label"</span>&gt;{attr.displayName}&lt;/label&gt;
+            &lt;input
+              {...<span class="fn">register</span>(attr.name)}
+              className=<span class="str">"field-input"</span>
+              placeholder={attr.annotations?.placeholder}
+            /&gt;
+          &lt;/div&gt;
+        );
+      })}
+    &lt;/&gt;
+  );
+}</code></pre>
+
+  <div class="callout callout-green">
+    <span class="callout-icon">💡</span>
+    <div>
+      <strong>Campos visíveis só para certos roles</strong>
+      <p>Use o campo <code>permissions.view</code> e <code>permissions.edit</code> no User Profile para controlar quais campos aparecem para usuários, admins, ou apenas internamente. Isso permite ter campos internos (plano, score) que nunca aparecem no formulário público.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     6. I18N
+════════════════════════════════════════════ -->
+<section class="section" id="i18n">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Textos, Traduções e Mensagens</h2>
+  </div>
+
+  <p>Todos os textos exibidos nas páginas do Keycloak vêm de arquivos <code>.properties</code> com chave-valor. Você pode sobrescrever qualquer mensagem sem tocar no código.</p>
+
+  <pre data-lang="properties"><code><span class="cm"># themes/meu-tema/login/messages/messages_pt_BR.properties</span>
+
+<span class="cm"># ── Login ──</span>
+loginTitle=Bem-vindo à Plataforma
+loginUsernameOrEmailPlaceholder=seu@email.com
+loginPasswordPlaceholder=Sua senha segura
+doLogIn=Entrar na plataforma
+doRegister=Criar conta gratuita
+doForgotPassword=Esqueci minha senha
+
+<span class="cm"># ── Registro ──</span>
+registerTitle=Crie sua conta
+doRegisterSubmit=Começar agora — é grátis
+backToLogin=← Já tenho conta
+
+<span class="cm"># ── Campos de perfil (User Profile) ──</span>
+profile.attributes.phone.label=Telefone com DDD
+profile.attributes.company.label=Nome da empresa
+profile.attributes.plan.label=Plano de interesse
+profile.attributes.areas.label=Áreas de interesse
+profile.attributes.bio.label=Sobre você
+
+<span class="cm"># ── Erros customizados ──</span>
+invalidUserMessage=Email ou senha não reconhecidos
+accountDisabledMessage=Sua conta está suspensa. Fale com o suporte.
+invalidPasswordMinLengthMessage=A senha precisa ter pelo menos 8 caracteres
+
+<span class="cm"># ── MFA ──</span>
+loginTotpTitle=Verificação em dois fatores
+loginTotpStep1=Abra seu app autenticador
+loginTotpOneTimeCode=Código de 6 dígitos
+
+<span class="cm"># ── E-mail ──</span>
+emailVerificationSubject=Confirme seu e-mail — {0}
+passwordResetSubject=Redefinir senha — {0}</code></pre>
+</section>
+
+<!-- ════════════════════════════════════════════
+     7. ACCOUNT CONSOLE INTRO
+════════════════════════════════════════════ -->
+<section class="section" id="account-intro">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Account Console — O que é possível</h2>
+  </div>
+
+  <p>O Account Console é o portal onde o usuário gerencia sua conta no Keycloak: senha, sessões ativas, autenticadores, etc. Desde 2024, o Keycloak disponibilizou o pacote <code>@keycloak/keycloak-account-ui</code> que permite <em>construir do zero</em> um Account Console customizado em React.</p>
+
+  <div class="callout callout-green">
+    <span class="callout-icon">✨</span>
+    <div>
+      <strong>O que você pode fazer com o Account Console customizado</strong>
+      <p>Adicionar abas completamente novas com qualquer funcionalidade — consumindo APIs externas, como o Circle.so. Remover páginas que não fazem sentido para seu produto. Substituir páginas existentes por versões customizadas. Mudar layout, cores, logo e identidade visual. Tudo isso sem fazer fork do código-fonte do Keycloak.</p>
+    </div>
+  </div>
+
+  <h3>Setup do projeto Account Console</h3>
+  <pre data-lang="bash"><code><span class="cm"># Criar projeto com a ferramenta oficial</span>
+npm create keycloak-theme@latest meu-account-console
+cd meu-account-console
+npm install
+
+<span class="cm"># Instalar as dependências do Account Console</span>
+npm install @keycloak/keycloak-account-ui @keycloak/keycloak-ui-shared
+
+<span class="cm"># Iniciar Keycloak local para desenvolvimento</span>
+npm run start-keycloak
+
+<span class="cm"># Iniciar o frontend com hot-reload</span>
+npm run dev</code></pre>
+
+  <h3>Estrutura do projeto</h3>
+  <pre data-lang="text"><code>src/
+├── main.tsx                <span class="cm"># Entry point React</span>
+├── routes.tsx              <span class="cm"># ← aqui você registra novas abas!</span>
+├── App.tsx
+├── MeusCursos.tsx          <span class="cm"># sua nova aba</span>
+├── MinhaAssinatura.tsx     <span class="cm"># sua nova aba</span>
+├── MeuProgresso.tsx        <span class="cm"># sua nova aba</span>
+└── api/
+    └── circle.ts           <span class="cm"># funções para chamar o Circle.so</span></code></pre>
+
+  <h3>Registrando novas abas em routes.tsx</h3>
+  <pre data-lang="tsx"><code><span class="cm">// routes.tsx</span>
+<span class="kw">import</span> {
+  <span class="fn">AccountSecurity</span>, <span class="fn">LinkedAccounts</span>, <span class="fn">PersonalInfo</span>,
+  <span class="fn">Sessions</span>, <span class="fn">Devices</span>
+} <span class="kw">from</span> <span class="str">"@keycloak/keycloak-account-ui"</span>;
+
+<span class="cm">// Suas novas páginas customizadas</span>
+<span class="kw">import</span> { <span class="fn">MeusCursos</span> } <span class="kw">from</span> <span class="str">"./MeusCursos"</span>;
+<span class="kw">import</span> { <span class="fn">MinhaAssinatura</span> } <span class="kw">from</span> <span class="str">"./MinhaAssinatura"</span>;
+<span class="kw">import</span> { <span class="fn">MeuProgresso</span> } <span class="kw">from</span> <span class="str">"./MeuProgresso"</span>;
+<span class="kw">import</span> { <span class="fn">MinhasNotificacoes</span> } <span class="kw">from</span> <span class="str">"./MinhasNotificacoes"</span>;
+
+<span class="kw">export const</span> routes = [
+  <span class="cm">/* ── Seção: Conta ── */</span>
+  {
+    path: <span class="str">""</span>,
+    label: <span class="str">"Meu Perfil"</span>,
+    element: &lt;<span class="fn">PersonalInfo</span> /&gt;,      <span class="cm">// página existente do Keycloak</span>
+    icon: <span class="str">"UserIcon"</span>,
+  },
+  {
+    path: <span class="str">"security"</span>,
+    label: <span class="str">"Segurança"</span>,
+    element: &lt;<span class="fn">AccountSecurity</span> /&gt;,
+    icon: <span class="str">"LockIcon"</span>,
+  },
+  {
+    path: <span class="str">"sessions"</span>,
+    label: <span class="str">"Sessões ativas"</span>,
+    element: &lt;<span class="fn">Sessions</span> /&gt;,
+    icon: <span class="str">"DesktopIcon"</span>,
+  },
+
+  <span class="cm">/* ── Seção: Plataforma de Cursos ── */</span>
+  {
+    path: <span class="str">"meus-cursos"</span>,
+    label: <span class="str">"Meus Cursos"</span>,
+    element: &lt;<span class="fn">MeusCursos</span> /&gt;,          <span class="cm">// ← sua aba customizada!</span>
+    icon: <span class="str">"BookOpenIcon"</span>,
+    group: <span class="str">"Plataforma"</span>,              <span class="cm">// agrupa no menu lateral</span>
+  },
+  {
+    path: <span class="str">"progresso"</span>,
+    label: <span class="str">"Meu Progresso"</span>,
+    element: &lt;<span class="fn">MeuProgresso</span> /&gt;,
+    icon: <span class="str">"ChartIcon"</span>,
+    group: <span class="str">"Plataforma"</span>,
+  },
+  {
+    path: <span class="str">"assinatura"</span>,
+    label: <span class="str">"Assinatura"</span>,
+    element: &lt;<span class="fn">MinhaAssinatura</span> /&gt;,
+    icon: <span class="str">"CreditCardIcon"</span>,
+    group: <span class="str">"Plataforma"</span>,
+  },
+  {
+    path: <span class="str">"notificacoes"</span>,
+    label: <span class="str">"Notificações"</span>,
+    element: &lt;<span class="fn">MinhasNotificacoes</span> /&gt;,
+    icon: <span class="str">"BellIcon"</span>,
+    group: <span class="str">"Plataforma"</span>,
+  },
+];</code></pre>
+</section>
+
+<!-- ════════════════════════════════════════════
+     8. ABA MEUS CURSOS
+════════════════════════════════════════════ -->
+<section class="section" id="aba-cursos">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Aba: Meus Cursos</h2>
+  </div>
+
+  <p>Esta aba exibe os cursos que o usuário está inscrito no Circle.so, com progresso, último acesso e botão para continuar. Os dados vêm da <strong>Circle Headless API</strong> autenticada com o JWT gerado a partir do <code>sub</code> do Keycloak.</p>
+
+  <h3>api/circle.ts — funções reutilizáveis</h3>
+  <pre data-lang="ts"><code><span class="cm">// src/api/circle.ts</span>
+<span class="cm">// Funções para comunicar com a Circle.so API</span>
+
+<span class="kw">const</span> CIRCLE_API = <span class="str">"https://app.circle.so"</span>;
+<span class="kw">const</span> HEADLESS_AUTH_TOKEN = <span class="fn">import.meta.env</span>.VITE_CIRCLE_AUTH_TOKEN;
+
+<span class="cm">/**
+ * Obtém o JWT do Circle.so a partir do SSO ID do Keycloak.
+ * Deve ser chamado server-side ou em um BFF.
+ * O `sso_id` é o `sub` do token Keycloak do usuário.
+ */</span>
+<span class="kw">export async function</span> <span class="fn">getCircleJwt</span>(ssoId: string): Promise&lt;string&gt; {
+  <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`${CIRCLE_API}/api/v1/headless/auth_token`</span>, {
+    method: <span class="str">"POST"</span>,
+    headers: {
+      <span class="str">"Authorization"</span>: <span class="str">`Bearer ${HEADLESS_AUTH_TOKEN}`</span>,
+      <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span>
+    },
+    body: <span class="fn">JSON.stringify</span>({ sso_id: ssoId })
+  });
+  <span class="kw">const</span> data = <span class="kw">await</span> res.<span class="fn">json</span>();
+  <span class="kw">return</span> data.access_token;
+}
+
+<span class="cm">/** Lista os spaces/cursos que o membro tem acesso */</span>
+<span class="kw">export async function</span> <span class="fn">getMemberCourses</span>(jwt: string) {
+  <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`${CIRCLE_API}/api/headless/v1/spaces?type=course`</span>, {
+    headers: { <span class="str">"Authorization"</span>: <span class="str">`Bearer ${jwt}`</span> }
+  });
+  <span class="kw">return</span> res.<span class="fn">json</span>();  <span class="cm">// lista de spaces do tipo curso</span>
+}
+
+<span class="cm">/** Progresso do membro em um curso (lições concluídas) */</span>
+<span class="kw">export async function</span> <span class="fn">getCourseProgress</span>(jwt: string, spaceId: number) {
+  <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(
+    <span class="str">`${CIRCLE_API}/api/headless/v1/spaces/${spaceId}/course_lessons`</span>,
+    { headers: { <span class="str">"Authorization"</span>: <span class="str">`Bearer ${jwt}`</span> } }
+  );
+  <span class="kw">return</span> res.<span class="fn">json</span>();
+}
+
+<span class="cm">/** Feed da comunidade (posts recentes nos spaces do membro) */</span>
+<span class="kw">export async function</span> <span class="fn">getCommunityFeed</span>(jwt: string, page = <span class="num">1</span>) {
+  <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(
+    <span class="str">`${CIRCLE_API}/api/headless/v1/home?page=${page}&per_page=20&sort=latest`</span>,
+    { headers: { <span class="str">"Authorization"</span>: <span class="str">`Bearer ${jwt}`</span> } }
+  );
+  <span class="kw">return</span> res.<span class="fn">json</span>();
+}
+
+<span class="cm">/** Notificações não lidas do membro */</span>
+<span class="kw">export async function</span> <span class="fn">getNotifications</span>(jwt: string) {
+  <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(
+    <span class="str">`${CIRCLE_API}/api/headless/v1/notifications?unread=true`</span>,
+    { headers: { <span class="str">"Authorization"</span>: <span class="str">`Bearer ${jwt}`</span> } }
+  );
+  <span class="kw">return</span> res.<span class="fn">json</span>();
+}</code></pre>
+
+  <h3>MeusCursos.tsx — componente completo</h3>
+  <pre data-lang="tsx"><code><span class="cm">// src/MeusCursos.tsx</span>
+<span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">"react"</span>;
+<span class="kw">import</span> { <span class="fn">Page</span>, <span class="fn">useEnvironment</span>, <span class="fn">usePromise</span> } <span class="kw">from</span> <span class="str">"@keycloak/keycloak-account-ui"</span>;
+<span class="kw">import</span> { <span class="fn">getMemberCourses</span>, <span class="fn">getCourseProgress</span> } <span class="kw">from</span> <span class="str">"./api/circle"</span>;
+
+<span class="kw">type</span> Course = {
+  id: number;
+  name: string;
+  slug: string;
+  cover_image_url: string;
+  description: string;
+  totalLessons: number;
+  completedLessons: number;
+};
+
+<span class="kw">export function</span> <span class="fn">MeusCursos</span>() {
+  <span class="kw">const</span> env = <span class="fn">useEnvironment</span>();
+  <span class="kw">const</span> [courses, setCourses] = <span class="fn">useState</span>&lt;Course[]&gt;([]);
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);
+
+  <span class="kw">const</span> circleJwt = env.features?.circleJwt; <span class="cm">// JWT passado via environment</span>
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">if</span> (!circleJwt) <span class="kw">return</span>;
+    <span class="fn">getMemberCourses</span>(circleJwt).<span class="fn">then</span>(<span class="kw">async</span> (spaces) =&gt; {
+      <span class="kw">const</span> withProgress = <span class="kw">await</span> Promise.<span class="fn">all</span>(
+        spaces.<span class="fn">map</span>(<span class="kw">async</span> (s: any) =&gt; {
+          <span class="kw">const</span> lessons = <span class="kw">await</span> <span class="fn">getCourseProgress</span>(circleJwt, s.id);
+          <span class="kw">return</span> {
+            ...s,
+            totalLessons: lessons.length,
+            completedLessons: lessons.<span class="fn">filter</span>((l: any) =&gt; l.completed).<span class="fn">length</span>
+          };
+        })
+      );
+      <span class="fn">setCourses</span>(withProgress);
+      <span class="fn">setLoading</span>(<span class="kw">false</span>);
+    });
+  }, [circleJwt]);
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">Page</span>
+      title=<span class="str">"Meus Cursos"</span>
+      description=<span class="str">"Acompanhe seu progresso nos cursos da plataforma"</span>
+    &gt;
+      {loading ? (
+        &lt;div className=<span class="str">"pf-v5-l-flex pf-m-justify-content-center"</span>&gt;
+          &lt;span className=<span class="str">"pf-v5-c-spinner"</span> /&gt;
+        &lt;/div&gt;
+      ) : (
+        &lt;div className=<span class="str">"courses-grid"</span>&gt;
+          {courses.<span class="fn">map</span>(course =&gt; (
+            &lt;div key={course.id} className=<span class="str">"course-card"</span>&gt;
+
+              <span class="cm">/* Capa do curso */</span>
+              &lt;div
+                className=<span class="str">"course-cover"</span>
+                style={{ backgroundImage: <span class="str">`url(${course.cover_image_url})`</span> }}
+              /&gt;
+
+              &lt;div className=<span class="str">"course-body"</span>&gt;
+                &lt;h3&gt;{course.name}&lt;/h3&gt;
+                &lt;p&gt;{course.description}&lt;/p&gt;
+
+                <span class="cm">/* Barra de progresso */</span>
+                &lt;div className=<span class="str">"progress-bar"</span>&gt;
+                  &lt;div className=<span class="str">"pf-v5-c-progress"</span>&gt;
+                    &lt;div
+                      className=<span class="str">"pf-v5-c-progress__bar"</span>
+                      style={{
+                        width: <span class="str">`${(course.completedLessons / course.totalLessons) * 100}%`</span>
+                      }}
+                    /&gt;
+                  &lt;/div&gt;
+                  &lt;span&gt;{course.completedLessons}/{course.totalLessons} aulas concluídas&lt;/span&gt;
+                &lt;/div&gt;
+
+                <span class="cm">/* Botão de acesso */</span>
+                &lt;a
+                  href=<span class="str">`https://sua-comunidade.circle.so/c/${course.slug}`</span>
+                  target=<span class="str">"_blank"</span>
+                  className=<span class="str">"pf-v5-c-button pf-m-primary"</span>
+                &gt;
+                  {course.completedLessons === <span class="num">0</span>
+                    ? <span class="str">"Começar curso"</span>
+                    : course.completedLessons === course.totalLessons
+                      ? <span class="str">"✓ Concluído"</span>
+                      : <span class="str">"Continuar"</span>}
+                &lt;/a&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      )}
+    &lt;/<span class="fn">Page</span>&gt;
+  );
+}</code></pre>
+</section>
+
+<!-- ════════════════════════════════════════════
+     9. ABA ASSINATURA
+════════════════════════════════════════════ -->
+<section class="section" id="aba-assinatura">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Aba: Assinatura e Plano</h2>
+  </div>
+
+  <p>Esta aba mostra o plano atual do usuário (armazenado como atributo no Keycloak) e permite trocar de plano. A mudança de plano dispara a sincronização no Circle.so via Admin API para ajustar o acesso aos Spaces.</p>
+
+  <pre data-lang="tsx"><code><span class="cm">// src/MinhaAssinatura.tsx</span>
+<span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">"react"</span>;
+<span class="kw">import</span> {
+  <span class="fn">Page</span>, <span class="fn">useEnvironment</span>, <span class="fn">useAlerts</span>,
+  <span class="fn">AccountEnvironment</span>
+} <span class="kw">from</span> <span class="str">"@keycloak/keycloak-account-ui"</span>;
+
+<span class="kw">const</span> PLANOS = [
+  { id: <span class="str">"free"</span>,       label: <span class="str">"Gratuito"</span>,   preco: <span class="str">"R$ 0/mês"</span>,    recursos: [<span class="str">"Acesso básico"</span>, <span class="str">"Fórum geral"</span>] },
+  { id: <span class="str">"basic"</span>,      label: <span class="str">"Básico"</span>,      preco: <span class="str">"R$ 49/mês"</span>,   recursos: [<span class="str">"2 cursos"</span>, <span class="str">"Fórum geral"</span>, <span class="str">"Live mensal"</span>] },
+  { id: <span class="str">"premium"</span>,    label: <span class="str">"Premium"</span>,    preco: <span class="str">"R$ 99/mês"</span>,   recursos: [<span class="str">"Todos os cursos"</span>, <span class="str">"Mentoria"</span>, <span class="str">"Lives ilimitadas"</span>] },
+  { id: <span class="str">"enterprise"</span>, label: <span class="str">"Enterprise"</span>, preco: <span class="str">"Sob consulta"</span>, recursos: [<span class="str">"Tudo + whitelabel"</span>, <span class="str">"Suporte dedicado"</span>] },
+];
+
+<span class="kw">export function</span> <span class="fn">MinhaAssinatura</span>() {
+  <span class="kw">const</span> env = <span class="fn">useEnvironment</span>&lt;<span class="fn">AccountEnvironment</span>&gt;();
+  <span class="kw">const</span> { <span class="fn">addAlert</span> } = <span class="fn">useAlerts</span>();
+  <span class="kw">const</span> [planoAtual, setPlanoAtual] = <span class="fn">useState</span>(<span class="str">"free"</span>);
+  <span class="kw">const</span> [salvando, setSalvando] = <span class="fn">useState</span>(<span class="kw">false</span>);
+
+  <span class="cm">// Lê plano atual do atributo do usuário no Keycloak</span>
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> plano = env.profile?.attributes?.plan?.[<span class="num">0</span>] ?? <span class="str">"free"</span>;
+    <span class="fn">setPlanoAtual</span>(plano);
+  }, [env]);
+
+  <span class="kw">const</span> <span class="fn">handleMudarPlano</span> = <span class="kw">async</span> (novoPlano: string) =&gt; {
+    <span class="fn">setSalvando</span>(<span class="kw">true</span>);
+    <span class="kw">try</span> {
+      <span class="cm">// 1. Atualiza atributo no Keycloak via Account API</span>
+      <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`${env.serverBaseUrl}/realms/${env.realm}/account`</span>, {
+        method: <span class="str">"POST"</span>,
+        headers: {
+          <span class="str">"Authorization"</span>: <span class="str">`Bearer ${env.keycloakService.token}`</span>,
+          <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span>
+        },
+        body: <span class="fn">JSON.stringify</span>({
+          attributes: { plan: [novoPlano] }
+        })
+      });
+
+      <span class="cm">// 2. Chama BFF para sincronizar spaces no Circle.so</span>
+      <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"/api/sync-circle-plan"</span>, {
+        method: <span class="str">"POST"</span>,
+        headers: { <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span> },
+        body: <span class="fn">JSON.stringify</span>({
+          ssoId: env.profile?.id,
+          plano: novoPlano
+        })
+      });
+
+      <span class="fn">setPlanoAtual</span>(novoPlano);
+      <span class="fn">addAlert</span>(<span class="str">"Plano atualizado com sucesso! ✓"</span>, <span class="str">"success"</span>);
+    } <span class="kw">catch</span> (e) {
+      <span class="fn">addAlert</span>(<span class="str">"Erro ao atualizar plano. Tente novamente."</span>, <span class="str">"danger"</span>);
+    } <span class="kw">finally</span> {
+      <span class="fn">setSalvando</span>(<span class="kw">false</span>);
+    }
+  };
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">Page</span> title=<span class="str">"Minha Assinatura"</span> description=<span class="str">"Gerencie seu plano de acesso"</span>&gt;
+      &lt;div className=<span class="str">"plans-grid"</span>&gt;
+        {PLANOS.<span class="fn">map</span>(plano =&gt; (
+          &lt;div
+            key={plano.id}
+            className=<span class="str">`plan-card ${planoAtual === plano.id ? 'active' : ''}`</span>
+            onClick={() =&gt; <span class="fn">handleMudarPlano</span>(plano.id)}
+          &gt;
+            &lt;div className=<span class="str">"plan-name"</span>&gt;{plano.label}&lt;/div&gt;
+            &lt;div className=<span class="str">"plan-price"</span>&gt;{plano.preco}&lt;/div&gt;
+            &lt;ul&gt;{plano.recursos.<span class="fn">map</span>(r =&gt; &lt;li key={r}&gt;{r}&lt;/li&gt;)}&lt;/ul&gt;
+            {planoAtual === plano.id &amp;&amp; &lt;span className=<span class="str">"badge-ativo"</span>&gt;Plano atual&lt;/span&gt;}
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/<span class="fn">Page</span>&gt;
+  );
+}</code></pre>
+
+  <h3>BFF: sincronizar spaces no Circle.so ao mudar plano</h3>
+  <pre data-lang="ts"><code><span class="cm">// server/sync-circle-plan.ts (Node.js / Next.js API Route)</span>
+<span class="kw">const</span> SPACE_IDS_BY_PLAN: Record&lt;string, number[]&gt; = {
+  free:       [<span class="num">111</span>],               <span class="cm">// Space: Comunidade Geral</span>
+  basic:      [<span class="num">111</span>, <span class="num">222</span>, <span class="num">333</span>],     <span class="cm">// + 2 cursos básicos</span>
+  premium:    [<span class="num">111</span>, <span class="num">222</span>, <span class="num">333</span>, <span class="num">444</span>, <span class="num">555</span>], <span class="cm">// todos os cursos</span>
+  enterprise: [<span class="num">111</span>, <span class="num">222</span>, <span class="num">333</span>, <span class="num">444</span>, <span class="num">555</span>, <span class="num">666</span>]
+};
+
+<span class="kw">export async function</span> <span class="fn">syncCirclePlan</span>(ssoId: string, novoPlano: string) {
+  <span class="kw">const</span> ALL_SPACES = [<span class="num">111</span>, <span class="num">222</span>, <span class="num">333</span>, <span class="num">444</span>, <span class="num">555</span>, <span class="num">666</span>];
+  <span class="kw">const</span> targetSpaces = SPACE_IDS_BY_PLAN[novoPlano] ?? [];
+
+  <span class="kw">for</span> (<span class="kw">const</span> spaceId <span class="kw">of</span> ALL_SPACES) {
+    <span class="kw">const</span> shouldHaveAccess = targetSpaces.<span class="fn">includes</span>(spaceId);
+    <span class="kw">const</span> method = shouldHaveAccess ? <span class="str">"POST"</span> : <span class="str">"DELETE"</span>;
+
+    <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`https://app.circle.so/api/v1/space_members`</span>, {
+      method,
+      headers: {
+        <span class="str">"Authorization"</span>: <span class="str">`Bearer ${process.env.CIRCLE_API_TOKEN}`</span>,
+        <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span>
+      },
+      body: <span class="fn">JSON.stringify</span>({ space_id: spaceId, sso_id: ssoId })
+    });
+  }
+}</code></pre>
+</section>
+
+<!-- ════════════════════════════════════════════
+     10. ABA PROGRESSO
+════════════════════════════════════════════ -->
+<section class="section" id="aba-progresso">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Aba: Meu Progresso</h2>
+  </div>
+
+  <p>Consolida dados de atividade do membro no Circle.so — aulas concluídas, posts criados, comentários, reações recebidas — formando um painel de progresso gamificado.</p>
+
+  <pre data-lang="tsx"><code><span class="cm">// src/MeuProgresso.tsx</span>
+<span class="kw">import</span> { <span class="fn">Page</span>, <span class="fn">useEnvironment</span> } <span class="kw">from</span> <span class="str">"@keycloak/keycloak-account-ui"</span>;
+<span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">"react"</span>;
+
+<span class="kw">export function</span> <span class="fn">MeuProgresso</span>() {
+  <span class="kw">const</span> env = <span class="fn">useEnvironment</span>();
+  <span class="kw">const</span> [stats, setStats] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> jwt = env.features?.circleJwt;
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">if</span> (!jwt) <span class="kw">return</span>;
+    <span class="cm">// Busca estatísticas do membro via Circle Headless API</span>
+    Promise.<span class="fn">all</span>([
+      <span class="fn">fetch</span>(<span class="str">`https://app.circle.so/api/headless/v1/posts?author=me`</span>,
+            { headers: { Authorization: <span class="str">`Bearer ${jwt}`</span> } }),
+      <span class="fn">fetch</span>(<span class="str">`https://app.circle.so/api/headless/v1/comments?author=me`</span>,
+            { headers: { Authorization: <span class="str">`Bearer ${jwt}`</span> } }),
+    ]).<span class="fn">then</span>(<span class="kw">async</span> ([postsRes, commentsRes]) =&gt; {
+      <span class="kw">const</span> posts    = <span class="kw">await</span> postsRes.<span class="fn">json</span>();
+      <span class="kw">const</span> comments = <span class="kw">await</span> commentsRes.<span class="fn">json</span>();
+      <span class="fn">setStats</span>({
+        posts:    posts.total_count ?? posts.length,
+        comments: comments.total_count ?? comments.length,
+        <span class="cm">// outros dados: aulas concluídas, reações recebidas, streak...</span>
+      });
+    });
+  }, [jwt]);
+
+  <span class="kw">if</span> (!stats) <span class="kw">return</span> &lt;<span class="fn">Page</span> title=<span class="str">"Meu Progresso"</span>&gt;&lt;span className=<span class="str">"pf-v5-c-spinner"</span>/&gt;&lt;/<span class="fn">Page</span>&gt;;
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">Page</span> title=<span class="str">"Meu Progresso"</span> description=<span class="str">"Sua atividade na comunidade"</span>&gt;
+      &lt;div className=<span class="str">"stats-grid"</span>&gt;
+        &lt;<span class="fn">StatCard</span> icon=<span class="str">"📝"</span> label=<span class="str">"Posts criados"</span>    value={stats.posts} /&gt;
+        &lt;<span class="fn">StatCard</span> icon=<span class="str">"💬"</span> label=<span class="str">"Comentários"</span>      value={stats.comments} /&gt;
+        &lt;<span class="fn">StatCard</span> icon=<span class="str">"🎓"</span> label=<span class="str">"Aulas concluídas"</span> value={stats.lessons ?? <span class="num">0</span>} /&gt;
+        &lt;<span class="fn">StatCard</span> icon=<span class="str">"🔥"</span> label=<span class="str">"Streak (dias)"</span>    value={stats.streak ?? <span class="num">0</span>} /&gt;
+      &lt;/div&gt;
+    &lt;/<span class="fn">Page</span>&gt;
+  );
+}
+
+<span class="kw">function</span> <span class="fn">StatCard</span>({ icon, label, value }) {
+  <span class="kw">return</span> (
+    &lt;div className=<span class="str">"pf-v5-c-card"</span>&gt;
+      &lt;div className=<span class="str">"pf-v5-c-card__body stat-body"</span>&gt;
+        &lt;span className=<span class="str">"stat-icon"</span>&gt;{icon}&lt;/span&gt;
+        &lt;span className=<span class="str">"stat-value"</span>&gt;{value}&lt;/span&gt;
+        &lt;span className=<span class="str">"stat-label"</span>&gt;{label}&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+</section>
+
+<!-- ════════════════════════════════════════════
+     11. ABA NOTIFICAÇÕES
+════════════════════════════════════════════ -->
+<section class="section" id="aba-notif">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2>Aba: Notificações</h2>
+  </div>
+
+  <p>Exibe notificações não lidas da comunidade Circle.so diretamente dentro do Account Console. O usuário pode ver e marcar como lidas sem precisar acessar o Circle.so.</p>
+
+  <pre data-lang="tsx"><code><span class="cm">// src/MinhasNotificacoes.tsx</span>
+<span class="kw">import</span> { <span class="fn">Page</span>, <span class="fn">useEnvironment</span>, <span class="fn">useAlerts</span> } <span class="kw">from</span> <span class="str">"@keycloak/keycloak-account-ui"</span>;
+<span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">"react"</span>;
+
+<span class="kw">export function</span> <span class="fn">MinhasNotificacoes</span>() {
+  <span class="kw">const</span> env = <span class="fn">useEnvironment</span>();
+  <span class="kw">const</span> { <span class="fn">addAlert</span> } = <span class="fn">useAlerts</span>();
+  <span class="kw">const</span> [notifs, setNotifs] = <span class="fn">useState</span>([]);
+  <span class="kw">const</span> jwt = env.features?.circleJwt;
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">if</span> (!jwt) <span class="kw">return</span>;
+    <span class="fn">fetch</span>(<span class="str">`https://app.circle.so/api/headless/v1/notifications`</span>, {
+      headers: { Authorization: <span class="str">`Bearer ${jwt}`</span> }
+    }).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>()).<span class="fn">then</span>(setNotifs);
+  }, [jwt]);
+
+  <span class="kw">const</span> <span class="fn">marcarComoLida</span> = <span class="kw">async</span> (notifId: number) =&gt; {
+    <span class="kw">await</span> <span class="fn">fetch</span>(
+      <span class="str">`https://app.circle.so/api/headless/v1/notifications/${notifId}/read`</span>,
+      { method: <span class="str">"PUT"</span>, headers: { Authorization: <span class="str">`Bearer ${jwt}`</span> } }
+    );
+    <span class="fn">setNotifs</span>(prev =&gt; prev.<span class="fn">filter</span>((n: any) =&gt; n.id !== notifId));
+    <span class="fn">addAlert</span>(<span class="str">"Marcada como lida"</span>, <span class="str">"success"</span>);
+  };
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">Page</span> title=<span class="str">"Notificações"</span> description=<span class="str">`${notifs.length} não lidas`</span>&gt;
+      {notifs.length === <span class="num">0</span>
+        ? &lt;p&gt;Você está em dia! Nenhuma notificação pendente.&lt;/p&gt;
+        : notifs.<span class="fn">map</span>((n: any) =&gt; (
+            &lt;div key={n.id} className=<span class="str">"pf-v5-c-notification-drawer__list-item"</span>&gt;
+              &lt;div className=<span class="str">"notif-content"</span>&gt;
+                &lt;strong&gt;{n.body}&lt;/strong&gt;
+                &lt;span className=<span class="str">"notif-time"</span>&gt;{n.created_at}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;button
+                className=<span class="str">"pf-v5-c-button pf-m-plain"</span>
+                onClick={() =&gt; <span class="fn">marcarComoLida</span>(n.id)}
+                title=<span class="str">"Marcar como lida"</span>
+              &gt;✓&lt;/button&gt;
+            &lt;/div&gt;
+          ))
+      }
+    &lt;/<span class="fn">Page</span>&gt;
+  );
+}</code></pre>
+</section>
+
+<!-- ════════════════════════════════════════════
+     12. CIRCLE API
+════════════════════════════════════════════ -->
+<section class="section" id="circle-api">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <h2>Circle.so — Mapa de APIs</h2>
+  </div>
+
+  <p>O Circle.so possui três APIs distintas com propósitos diferentes. Entender qual usar em cada caso é essencial para construir integrações robustas.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>API</th><th>Autenticação</th><th>Propósito</th><th>Plano</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="pill pill-blue">Admin API v2</span></td>
+        <td>API Token (admin)</td>
+        <td>Gerenciar membros, spaces, posts — operações administrativas server-side</td>
+        <td>Business+</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-green">Headless Auth API</span></td>
+        <td>Auth Token (admin)</td>
+        <td>Gerar JWT do membro a partir de email, ID ou SSO ID — ponte Keycloak ↔ Circle</td>
+        <td>Business+</td>
+      </tr>
+      <tr>
+        <td><span class="pill pill-purple">Headless Member API</span></td>
+        <td>JWT do membro</td>
+        <td>Ações em nome do membro: posts, comentários, notificações, feed, cursos, chat</td>
+        <td>Business+</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Endpoints principais — Admin API v2</h3>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Método</th><th>O que faz</th></tr></thead>
+    <tbody>
+      <tr><td><code>/api/v2/community_members</code></td><td>GET / POST</td><td>Listar e criar membros</td></tr>
+      <tr><td><code>/api/v2/community_members/{id}</code></td><td>PATCH / DELETE</td><td>Atualizar ou remover membro</td></tr>
+      <tr><td><code>/api/v2/spaces</code></td><td>GET / POST</td><td>Listar e criar spaces</td></tr>
+      <tr><td><code>/api/v2/space_members</code></td><td>POST / DELETE</td><td>Adicionar/remover membro de space</td></tr>
+      <tr><td><code>/api/v2/posts</code></td><td>GET / POST</td><td>Posts na comunidade</td></tr>
+      <tr><td><code>/api/v2/member_tags</code></td><td>POST / DELETE</td><td>Tags de segmentação</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Endpoints principais — Headless Member API</h3>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Método</th><th>O que faz</th></tr></thead>
+    <tbody>
+      <tr><td><code>/api/headless/v1/home</code></td><td>GET</td><td>Feed personalizado do membro</td></tr>
+      <tr><td><code>/api/headless/v1/spaces</code></td><td>GET</td><td>Spaces acessíveis pelo membro</td></tr>
+      <tr><td><code>/api/headless/v1/posts</code></td><td>GET / POST</td><td>Criar e listar posts</td></tr>
+      <tr><td><code>/api/headless/v1/comments</code></td><td>GET / POST</td><td>Comentários</td></tr>
+      <tr><td><code>/api/headless/v1/notifications</code></td><td>GET / PUT</td><td>Notificações do membro</td></tr>
+      <tr><td><code>/api/headless/v1/events</code></td><td>GET</td><td>Eventos da comunidade</td></tr>
+      <tr><td><code>/api/headless/v1/members</code></td><td>GET</td><td>Diretório de membros</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════════════════════════════════
+     13. PONTE KC <-> CIRCLE
+════════════════════════════════════════════ -->
+<section class="section" id="bridge">
+  <div class="section-header">
+    <span class="section-num">13</span>
+    <h2>Ponte Keycloak ↔ Circle.so</h2>
+  </div>
+
+  <p>O <code>sub</code> do Keycloak (SSO ID) é a chave que liga as duas plataformas. Sempre que precisar agir no Circle.so em nome de um usuário do Keycloak, use esse fluxo:</p>
+
+  <div class="flow">
+    <div class="flow-row"><div class="flow-n">1</div><span>Usuário autentica no Keycloak → você recebe o <code>sub</code> do access token</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-row"><div class="flow-n">2</div><span>Backend chama <code>POST /api/v1/headless/auth_token</code> com <code>sso_id: sub</code></span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-row"><div class="flow-n">3</div><span>Circle.so retorna <code>access_token</code> e <code>refresh_token</code> do membro</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-row"><div class="flow-n">4</div><span>Use o <code>access_token</code> para qualquer chamada da Headless Member API</span></div>
+  </div>
+
+  <pre data-lang="ts"><code><span class="cm">// Exemplo completo: BFF que expõe dados do Circle.so ao Account Console</span>
+<span class="kw">import</span> jwt <span class="kw">from</span> <span class="str">"jsonwebtoken"</span>;
+
+app.<span class="fn">get</span>(<span class="str">"/api/circle/feed"</span>, <span class="kw">async</span> (req, res) =&gt; {
+  <span class="cm">// 1. Valida o token Keycloak do usuário</span>
+  <span class="kw">const</span> keycloakToken = req.headers.authorization?.split(<span class="str">" "</span>)[<span class="num">1</span>];
+  <span class="kw">const</span> decoded = jwt.<span class="fn">decode</span>(keycloakToken) <span class="kw">as any</span>;
+  <span class="kw">const</span> ssoId = decoded?.sub;
+
+  <span class="cm">// 2. Obtém JWT do Circle para esse usuário</span>
+  <span class="kw">const</span> authRes = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"https://app.circle.so/api/v1/headless/auth_token"</span>, {
+    method: <span class="str">"POST"</span>,
+    headers: {
+      <span class="str">"Authorization"</span>: <span class="str">`Bearer ${process.env.CIRCLE_AUTH_TOKEN}`</span>,
+      <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span>,
+    },
+    body: <span class="fn">JSON.stringify</span>({ sso_id: ssoId }),
+  });
+  <span class="kw">const</span> { access_token } = <span class="kw">await</span> authRes.<span class="fn">json</span>();
+
+  <span class="cm">// 3. Chama Circle Headless API com o JWT do membro</span>
+  <span class="kw">const</span> feedRes = <span class="kw">await</span> <span class="fn">fetch</span>(
+    <span class="str">"https://app.circle.so/api/headless/v1/home?per_page=20&sort=latest"</span>,
+    { headers: { <span class="str">"Authorization"</span>: <span class="str">`Bearer ${access_token}`</span> } }
+  );
+  <span class="kw">const</span> feed = <span class="kw">await</span> feedRes.<span class="fn">json</span>();
+
+  res.<span class="fn">json</span>(feed);
+});</code></pre>
+</section>
+
+<!-- ════════════════════════════════════════════
+     14. IDEIAS CRIATIVAS
+════════════════════════════════════════════ -->
+<section class="section" id="ideias">
+  <div class="section-header">
+    <span class="section-num">14</span>
+    <h2>Ideias para a Plataforma de Cursos</h2>
+  </div>
+
+  <p>Abaixo estão possibilidades concretas que a combinação das duas plataformas permite construir — coisas que as documentações oficiais não contam diretamente.</p>
+
+  <div class="idea-card">
+    <div class="idea-card-title">🎮 Gamificação com XP e Níveis <span class="badge">DESTAQUE</span></div>
+    <p>Use <strong>User Attributes do Keycloak</strong> para armazenar <code>xp</code>, <code>level</code> e <code>streak</code> de cada usuário. A cada aula concluída no Circle.so (via webhook), um serviço incrementa o XP do usuário no Keycloak. O Account Console exibe a barra de XP, nível atual e conquistas desbloqueadas. Roles do Keycloak podem ser automaticamente concedidas conforme o nível sobe (<code>level_bronze</code>, <code>level_silver</code>, <code>level_gold</code>), liberando novos spaces premium no Circle.so.</p>
+  </div>
+
+  <div class="idea-card green">
+    <div class="idea-card-title">🎓 Certificados automáticos ao completar curso <span class="badge" style="background:rgba(0,212,170,0.15);color:#34d399;border-color:rgba(0,212,170,0.25)">AUTOMAÇÃO</span></div>
+    <p>Configure um Keycloak Event Listener que é disparado quando o atributo <code>course_123_completed</code> de um usuário muda para <code>true</code> (atualizado via Circle API ao completar todas as lições). O listener chama um serviço que gera um PDF de certificado personalizado e envia por e-mail. O Account Console exibe todos os certificados disponíveis para download na aba "Meus Certificados".</p>
+  </div>
+
+  <div class="idea-card">
+    <div class="idea-card-title">🔓 Acesso progressivo por conquistas</div>
+    <p>Spaces no Circle.so são liberados automaticamente conforme o usuário avança. Ao completar o Módulo 1, o Keycloak recebe o role <code>modulo_1_completo</code> via API, e um serviço automaticamente adiciona o membro ao Space do Módulo 2. O usuário experimenta uma plataforma que se "abre" conforme ele avança — sem configuração manual.</p>
+  </div>
+
+  <div class="idea-card green">
+    <div class="idea-card-title">📊 Dashboard de engajamento no Account Console</div>
+    <p>A aba "Meu Progresso" vai além de aulas concluídas: consolida posts criados, comentários feitos, reações recebidas, eventos assistidos e streak de login (calculado via Keycloak Event Log). Um gráfico de barras mostra a atividade semanal. Usuários top-engajados recebem automaticamente o role <code>comunidade_ativo</code> que dá acesso a um Space VIP.</p>
+  </div>
+
+  <div class="idea-card warn">
+    <div class="idea-card-title">🔔 Central de notificações unificada <span class="badge" style="background:rgba(245,166,35,0.12);color:#fbbf24;border-color:rgba(245,166,35,0.2)">UX</span></div>
+    <p>O Account Console vira a central de comunicação do usuário. Notificações do Circle.so (novos posts, comentários, menções), e-mails enviados pelo Keycloak e alertas da plataforma aparecem em um único feed. O usuário marca como lido via Headless API sem precisar acessar o Circle.so diretamente.</p>
+  </div>
+
+  <div class="idea-card">
+    <div class="idea-card-title">🎨 Onboarding guiado no registro</div>
+    <p>O formulário de registro (Keycloakify) é transformado em um wizard multi-etapa: etapa 1 são dados básicos, etapa 2 são áreas de interesse (multiselect), etapa 3 é a escolha de plano. Com base nas respostas, o backend configura automaticamente os Spaces iniciais do usuário no Circle.so via Admin API — experiência de onboarding completamente personalizada desde o primeiro acesso.</p>
+  </div>
+
+  <div class="idea-card green">
+    <div class="idea-card-title">👥 Matching de mentores e alunos</div>
+    <p>Usuários com o role <code>mentor</code> no Keycloak aparecem em uma aba "Encontre um Mentor" no Account Console, com perfis carregados via Circle Members API (foto, bio, especialidades). O aluno solicita mentoria via um post no Circle.so criado pela Headless API. O mentor aceita e ambos são adicionados a um Space privado de mentoria criado automaticamente via Admin API.</p>
+  </div>
+
+  <div class="idea-card warn">
+    <div class="idea-card-title">📅 Agenda de lives integrada</div>
+    <p>O Account Console exibe os próximos eventos do Circle.so via <code>/api/headless/v1/events</code>, com RSVP diretamente pelo portal. Ao confirmar presença, o usuário recebe um convite de calendário via e-mail disparado pelo Keycloak (custom Email Theme). Eventos passados ficam disponíveis como replay com link direto para o Space.</p>
+  </div>
+
+  <div class="idea-card">
+    <div class="idea-card-title">🔐 Login social com contexto de curso</div>
+    <p>A página de login do Keycloak detecta o parâmetro <code>?redirect_to=curso-xyz</code> na URL e exibe uma mensagem contextual: <em>"Faça login para continuar o Curso de React"</em>. Após autenticar, o usuário é redirecionado diretamente para o Space do curso no Circle.so, não para a home da comunidade. Implementado em <code>Login.tsx</code> lendo os parâmetros de query do contexto Keycloakify.</p>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════
+     15. CHECKLIST
+════════════════════════════════════════════ -->
+<section class="section" id="checklist">
+  <div class="section-header">
+    <span class="section-num">15</span>
+    <h2>Checklist de Build e Deploy</h2>
+  </div>
+
+  <h3>Keycloakify (Login Theme)</h3>
+  <table>
+    <tbody>
+      <tr><td>✅</td><td>Instalar Keycloakify e configurar o <code>keycloakify</code> no <code>package.json</code></td></tr>
+      <tr><td>✅</td><td>Configurar Storybook para desenvolvimento sem Keycloak local</td></tr>
+      <tr><td>✅</td><td>Ejetar páginas que precisam de customização profunda</td></tr>
+      <tr><td>✅</td><td>Criar arquivo <code>messages_pt_BR.properties</code> com todos os textos</td></tr>
+      <tr><td>✅</td><td>Importar fontes e configurar <code>theme.properties</code></td></tr>
+      <tr><td>✅</td><td>Rodar <code>npm run build-keycloak-theme</code> e gerar o <code>.jar</code></td></tr>
+      <tr><td>✅</td><td>Colocar o <code>.jar</code> em <code>/opt/keycloak/providers/</code> e reiniciar</td></tr>
+      <tr><td>✅</td><td>Selecionar o tema em Realm Settings → Themes</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Account Console</h3>
+  <table>
+    <tbody>
+      <tr><td>✅</td><td>Criar projeto com <code>npm create keycloak-theme</code></td></tr>
+      <tr><td>✅</td><td>Instalar <code>@keycloak/keycloak-account-ui</code></td></tr>
+      <tr><td>✅</td><td>Criar componentes de abas customizadas</td></tr>
+      <tr><td>✅</td><td>Registrar novas rotas em <code>routes.tsx</code></td></tr>
+      <tr><td>✅</td><td>Criar serviço BFF para intermediar chamadas ao Circle.so</td></tr>
+      <tr><td>✅</td><td>Passar <code>circleJwt</code> via <code>environment.features</code></td></tr>
+      <tr><td>✅</td><td>Build e deploy do <code>.jar</code> no Keycloak</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Circle.so</h3>
+  <table>
+    <tbody>
+      <tr><td>✅</td><td>Configurar SSO em Settings → Single Sign-On → Custom</td></tr>
+      <tr><td>✅</td><td>Preencher os 3 endpoints do Keycloak</td></tr>
+      <tr><td>✅</td><td>Configurar Response Paths (<code>sub</code>, <code>email</code>, <code>name</code>, <code>picture</code>)</td></tr>
+      <tr><td>✅</td><td>Gerar token do tipo <strong>Headless Auth</strong> em Developers → Tokens</td></tr>
+      <tr><td>✅</td><td>Testar fluxo completo antes de ativar SSO exclusivo</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-red">
+    <span class="callout-icon">🚫</span>
+    <div>
+      <strong>Nunca exponha tokens no frontend</strong>
+      <p>O <code>CIRCLE_AUTH_TOKEN</code> (Headless Auth) e o <code>CIRCLE_API_TOKEN</code> (Admin API) são tokens server-side. Jamais os inclua em código que roda no browser. Use sempre um BFF (Backend For Frontend) para intermediar as chamadas ao Circle.so a partir do Account Console.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+</body>
+</html>
