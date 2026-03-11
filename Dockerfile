@@ -5,3 +5,4 @@ LABEL org.opencontainers.image.source="https://github.com/nossas/bonde-keycloak"
 LABEL org.opencontainers.image.description="Keycloak with Bonde custom theme"
 
 COPY themes/bonde /opt/keycloak/themes/bonde
+COPY providers/keycloak-restrict-client-auth.jar /opt/keycloak/providers/keycloak-restrict-client-auth.jar
