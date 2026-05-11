@@ -28,13 +28,21 @@ services:
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HOSTNAME: http://localhost:8181
       # # Define a URL pública da interface do Keycloak.
-      # KC_FRONTEND_URL: http://localhost:8181
+      KC_FRONTEND_URL: http://localhost:8181
       # # Define o hostname principal do Keycloak (usado internamente).
       # KEYCLOAK_HOSTNAME: http://localhost:8181
     ports:
       - "8181:8080"
     volumes:
       - ./themes:/opt/keycloak/themes
+      - ./providers:/opt/keycloak/providers
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "1025:1025" # SMTP server port
+      - "8025:8025" # Web UI port
 
 volumes:
   postgres_data:
