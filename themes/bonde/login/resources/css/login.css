@@ -5,6 +5,7 @@
 
     --pf-global--primary-color--100: #ffba00;
     --pf-global--primary-color--200: #cb9705;
+    --pf-c-form__label--FontSize: 14px;
 }
 
 body {
@@ -12,9 +13,178 @@ body {
 }
 
 .pf-c-button {
-    --pf-c-button--m-primary--Color: var(--pf-global--Color--dark-100);
-    --pf-c-button--m-primary--hover--Color: var(--pf-global--Color--dark-100);
-    --pf-c-button--m-primary--active--Color: var(--pf-global--Color--dark-100);
+    --pf-c-button--m-primary--Color: var(--pf-global--Color--light-100);
+    --pf-c-button--m-primary--BackgroundColor: var(--pf-global--Color--dark-100);
+    
+    --pf-c-button--m-primary--hover--Color: var(--pf-global--Color--light-100);
+    --pf-c-button--m-primary--hover--BackgroundColor: var(--pf-global--Color--dark-100);
+
+    --pf-c-button--m-primary--active--Color: var(--pf-global--Color--light-100);
+    --pf-c-button--m-primary--active--BackgroundColor: var(--pf-global--Color--dark-100);
+
+    --pf-c-button--m-primary--focus--Color: var(--pf-global--Color--light-100);
+    --pf-c-button--m-primary--focus--BackgroundColor: var(--pf-global--Color--dark-100);
+}
+
+.pf-c-button.pf-m-secondary,
+.pf-c-button.pf-m-secondary.pf-m-active,
+.pf-c-button.pf-m-secondary:active,
+.pf-c-button.pf-m-secondary:hover,
+.pf-c-button.pf-m-secondary:focus
+{
+    --pf-c-button--after--BorderColor: var(--pf-global--Color--dark-100);
+    --pf-c-button--m-secondary--Color: var(--pf-global--Color--dark-100);
+}
+
+.pf-c-form-control {
+    --pf-c-form-control--BorderRadius: 10px;
+    --pf-c-form-control--focus--BorderBottomWidth: 0;
+    --pf-c-form-control--Height: 45px;
+
+    --pf-c-form-control--BorderTopColor: var(--pf-global--BorderColor--300);
+    --pf-c-form-control--BorderRightColor: var(--pf-global--BorderColor--300);
+    --pf-c-form-control--BorderBottomColor: var(--pf-global--BorderColor--300);
+    --pf-c-form-control--BorderLeftColor: var(--pf-global--BorderColor--300);
+
+    outline: 1px solid var(--pf-global--BorderColor--300);
+}
+
+.pf-c-form-control:hover,
+.pf-c-form-control:focus,
+.pf-c-form-control:focus-visible {
+    --pf-c-form-control--BorderTopColor: var(--pf-global--Color--dark-100);
+    --pf-c-form-control--BorderRightColor: var(--pf-global--Color--dark-100);
+    --pf-c-form-control--BorderBottomColor: var(--pf-global--Color--dark-100);
+    --pf-c-form-control--BorderLeftColor: var(--pf-global--Color--dark-100);
+}
+
+.pf-c-form-control:focus {
+    padding-bottom: 5px;
+    border-bottom-width: 1px;
+}
+
+.checkbox-group {
+    margin: 40px 0;
+}
+
+.pf-c-switch {
+    --pf-c-switch__input--checked__toggle--BackgroundColor: var(--pf-global--Color--dark-100);
+
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.pf-c-switch__input:focus~.pf-c-switch__toggle {
+    outline: none;
+}
+
+.pf-c-switch__text {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: normal;
+}
+
+/* .pf-c-form-control:focus-visible {
+    outline-color: var(--pf-global--BorderColor--300);
+} */
+
+.pf-c-button.pf-m-control:focus-visible {
+    outline-color: transparent;
+}
+
+.pf-c-button.pf-m-control:focus-visible::after {
+    border: 2px solid var(--pf-global--BorderColor--300);
+}
+
+.pf-c-toggle-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pf-c-toggle-group:has(.pf-c-toggle-group__description) {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+
+.pf-c-toggle-group .pf-c-toggle-group__description {
+    font-weight: normal;
+}
+
+.pf-c-toggle-group:has(.pf-c-toggle-group__description) .pf-c-toggle-group__button {
+    border-radius: 3px;
+    --pf-c-toggle-group__item--first-child__button--BorderTopLeftRadius: 3px;
+    --pf-c-toggle-group__item--first-child__button--BorderBottomLeftRadius: 3px;
+    --pf-c-toggle-group__item--last-child__button--BorderTopRightRadius: 3px;
+    --pf-c-toggle-group__item--last-child__button--BorderBottomRightRadius: 3px;
+}
+
+.pf-c-toggle-group .pf-c-toggle-group__input {
+    display: none;
+}
+
+.pf-c-toggle-group .pf-c-toggle-group__button {
+    --pf-c-toggle-group__item--first-child__button--BorderTopLeftRadius: 48px;
+    --pf-c-toggle-group__item--first-child__button--BorderBottomLeftRadius: 48px;
+    --pf-c-toggle-group__item--last-child__button--BorderTopRightRadius: 48px;
+    --pf-c-toggle-group__item--last-child__button--BorderBottomRightRadius: 48px;
+    color: var(--pf-global--Color--dark-100);
+    border: 1px solid var(--pf-global--Color--dark-100);
+    border-radius: 48px;
+    padding: 10px 20px;
+    cursor: pointer;
+    outline: none;
+}
+
+.pf-c-toggle-group__button {
+    display: flex;
+    flex-direction: column;
+}
+
+.pf-c-toggle-group__button:before {
+    border: none;
+}
+
+.pf-c-toggle-group .pf-c-toggle-group__input:checked~.pf-c-toggle-group__button {
+    background-color: var(--pf-global--Color--dark-100);
+    color: var(--pf-global--Color--light-100);
+}
+
+.pf-c-form-control[type=password] {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.login-pf-page .card-pf {
+    box-shadow: none;
+    border-top: none;
+    max-width: 648px;
+}
+
+.login-pf-page .login-pf-settings {
+    margin-top: 10px;
+}
+
+.pf-c-form__label {
+    margin-bottom: 5px;
+}
+
+.btn-group-lg > .btn, .btn-lg {
+    padding: 12px 24px;
+    border-radius: 80px;
+}
+
+#try-another-way {
+    display: block;
+    text-align: center;
+    padding: 12px 24px;
+    border: 1px solid #000;
+    margin-top: 12px;
 }
 
 /* Patternfly CSS places a "bg-login.jpg" as the background on this ".login-pf" class.
@@ -44,11 +214,50 @@ p.instruction {
 }
 
 .pf-c-button.pf-m-control {
+    --pf-c-button--after--BorderColor: var(--pf-global--BorderColor--300) var(--pf-global--BorderColor--300) var(--pf-global--BorderColor--300) var(--pf-global--BorderColor--300);
     border-color: rgba(230, 230, 230, 0.5);
 }
 
+.pf-c-button.pf-m-control:after {
+    --pf-c-form-control--BorderRadius: 10px;
+    border-bottom-right-radius: var(--pf-c-form-control--BorderRadius);
+    border-top-right-radius: var(--pf-c-form-control--BorderRadius);
+}
+
+.pf-c-helper-text {
+    font-size: 12px;
+}
+
 h1#kc-page-title {
-    margin-top: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 0;
+}
+p#kc-page-description {
+    font-size: 14px;
+    text-align: center;
+    color: #000;
+}
+
+#kc-magic-link {
+    margin-top: 12px;
+}
+
+#kc-magic-link button::after {
+    border-radius: 80px;
+}
+
+#kc-username {
+    display: flex;
+    justify-content: space-between;
+}
+
+#input-help-text-password {
+    display: block;
+}
+
+label#kc-attempted-username {
+    font-size: 14px;
 }
 
 #kc-locale ul {
@@ -104,7 +313,7 @@ div.kc-logo-text {
     background-image: url(../img/bonde-logo-text.png);
     background-repeat: no-repeat;
     height: 70px;
-    width: 300px;
+    width: 352px;
     margin: 0 auto;
 }
 
@@ -123,7 +332,7 @@ div.kc-logo-text span {
     text-transform: uppercase;
     letter-spacing: 3px;
     line-height: 1.2em;
-    padding: 62px 10px 20px;
+    padding: 62px 10px 0;
     white-space: normal;
 }
 
@@ -177,6 +386,10 @@ div.kc-logo-text span {
 }
 
 #kc-content-wrapper {
+    margin-top: 20px;
+}
+
+#kc-content-wrapper form {
     margin-top: 20px;
 }
 
@@ -398,6 +611,10 @@ ul#kc-totp-supported-apps {
         text-align: right;
         z-index: 9999;
     }
+
+    .login-pf-page .login-pf-page-header {
+        margin-bottom: 0;
+    }
 }
 
 @media (max-width: 767px) {
@@ -471,7 +688,7 @@ ul#kc-totp-supported-apps {
 }
 
 #kc-form-buttons {
-    margin-top: 20px;
+    margin-top: 28px;
 }
 
 .login-pf-page .login-pf-brand {
