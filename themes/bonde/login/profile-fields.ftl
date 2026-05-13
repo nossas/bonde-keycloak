@@ -33,13 +33,13 @@
               error="${(lastNameError!'')}" />
 
             <@forms.inputField 
-                name="dateOfBirth"
+                name="birthday"
                 label="Data de nascimento"
                 helpText="Essa informação não será exibida publicamente."
                 type="date"
                 placeholder="dd/mm/aaaa"
-                value="${(dateOfBirth!'')}"
-                error="${(dateOfBirthError!'')}" />
+                value="${(birthday!'')}"
+                error="${(birthdayError!'')}" />
             
             <@forms.inputField 
                 name="identification"

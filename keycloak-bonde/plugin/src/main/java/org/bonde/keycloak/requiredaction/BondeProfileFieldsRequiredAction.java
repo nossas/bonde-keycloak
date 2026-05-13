@@ -33,8 +33,8 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         // Para nome completo, podemos combinar ou usar um campo separado
         // Vamos usar firstName como nome completo por simplicidade
         
-        String dateOfBirth = user.getFirstAttribute("dateOfBirth") != null ? 
-                             user.getFirstAttribute("dateOfBirth") : "";
+        String birthday = user.getFirstAttribute("birthday") != null ? 
+                             user.getFirstAttribute("birthday") : "";
         String identification = user.getFirstAttribute("identification") != null ? 
                                 user.getFirstAttribute("identification") : "";
         String state = user.getFirstAttribute("state") != null ? 
@@ -50,7 +50,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         Response challenge = context.form()
             .setAttribute("firstName", firstName)
             .setAttribute("lastName", lastName)
-            .setAttribute("dateOfBirth", dateOfBirth)
+            .setAttribute("birthday", birthday)
             .setAttribute("identification", identification)
             .setAttribute("state", state)
             .setAttribute("city", city)
@@ -70,7 +70,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         
         // Pega os valores enviados pelo formulário
         String firstName = formData.getFirst("firstName");
-        String dateOfBirth = formData.getFirst("dateOfBirth");
+        String birthday = formData.getFirst("birthday");
         String identification = formData.getFirst("identification");
         String state = formData.getFirst("state");
         String city = formData.getFirst("city");
@@ -79,7 +79,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         
         // Validação
         String firstNameError = null;
-        String dateOfBirthError = null;
+        String birthdayError = null;
         String identificationError = null;
         String stateError = null;
         String cityError = null;
@@ -90,17 +90,17 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
             hasError = true;
         }
         
-        if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
-            logger.debugf("DATA DE NASCIMENTO %s", dateOfBirth);
+        if (birthday != null && !birthday.trim().isEmpty()) {
+            logger.debugf("DATA DE NASCIMENTO %s", birthday);
             try {
-                LocalDate.parse(dateOfBirth);
+                LocalDate.parse(birthday);
             } catch (DateTimeParseException e) {
-                dateOfBirthError = "Data de nascimento inválida. Use o formato dd/mm/aaaa";
+                birthdayError = "Data de nascimento inválida. Use o formato dd/mm/aaaa";
                 hasError = true;
             }
         }
         
-        logger.debugf("DATA DE NASCIMENTO %s", dateOfBirth);
+        logger.debugf("DATA DE NASCIMENTO %s", birthday);
         if (identification == null || identification.trim().isEmpty()) {
             identificationError = "Como você se identifica é obrigatório";
             hasError = true;
@@ -120,14 +120,14 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
             // Recria o formulário com erros
             Response challenge = context.form()
                 .setAttribute("firstName", firstName != null ? firstName : "")
-                .setAttribute("dateOfBirth", dateOfBirth != null ? dateOfBirth : "")
+                .setAttribute("birthday", birthday != null ? birthday : "")
                 .setAttribute("identification", identification != null ? identification : "")
                 .setAttribute("state", state != null ? state : "")
                 .setAttribute("city", city != null ? city : "")
                 .setAttribute("allowMemberMessages", allowMemberMessages != null ? "true" : "false")
                 .setAttribute("showProfileDirectory", showProfileDirectory != null ? "true" : "false")
                 .setAttribute("firstNameError", firstNameError != null ? firstNameError : "")
-                .setAttribute("dateOfBirthError", dateOfBirthError != null ? dateOfBirthError : "")
+                .setAttribute("birthdayError", birthdayError != null ? birthdayError : "")
                 .setAttribute("identificationError", identificationError != null ? identificationError : "")
                 .setAttribute("stateError", stateError != null ? stateError : "")
                 .setAttribute("cityError", cityError != null ? cityError : "")
@@ -139,9 +139,9 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         // Salva os dados no usuário
         user.setFirstName(firstName.trim());
         
-        if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
-            logger.debugf("DATA DE NASCIMENTO ANTES DO SET %s", dateOfBirth);
-            user.setSingleAttribute("dateOfBirth", dateOfBirth);
+        if (birthday != null && !birthday.trim().isEmpty()) {
+            logger.debugf("DATA DE NASCIMENTO ANTES DO SET %s", birthday);
+            user.setSingleAttribute("birthday", birthday);
         }
         
         if (identification != null && !identification.trim().isEmpty()) {
