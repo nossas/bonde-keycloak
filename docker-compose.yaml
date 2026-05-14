@@ -1,0 +1,52 @@
+services:
+  # Database for Keycloak
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: segredo123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/docker-entrypoint-initdb:/docker-entrypoint-initdb.d
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.5.2
+    # Define a URL explícita para o hostname externo com HTTPS.
+    # Garante que o hostname seja estritamente seguido (evita acessos por outros domínios).
+    # Exige que todos os acessos usem HTTPS.
+    # Aplica restrições também aos canais de backchannel (como chamadas REST da API).
+    # Informa ao Keycloak que ele está atrás de um proxy (Caddy) que envia cabeçalhos X-Forwarded-*.
+    command: >-
+      start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: segredo123
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: http://localhost:8181
+      # # Define a URL pública da interface do Keycloak.
+      KC_FRONTEND_URL: http://localhost:8181
+      # # Define o hostname principal do Keycloak (usado internamente).
+      # KEYCLOAK_HOSTNAME: http://localhost:8181
+    ports:
+      - "8181:8080"
+    volumes:
+      - ./themes:/opt/keycloak/themes
+      - ./providers:/opt/keycloak/providers
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "1025:1025" # SMTP server port
+      - "8025:8025" # Web UI port
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    name: keycloak_network
