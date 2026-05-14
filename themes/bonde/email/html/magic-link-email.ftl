@@ -10,5 +10,5 @@
         <a href="${magicLink}" class="cta-button">Acessar minha conta BONDE</a>
     </p>
     
-    <p>Se você não solicitou este acesso, ignore este e-mail. Este link é válido por 24 horas.</p>
+    <p>Se você não solicitou este acesso, ignore este e-mail. Este link é válido por 7 dias.</p>
 </@layout.emailLayout>
