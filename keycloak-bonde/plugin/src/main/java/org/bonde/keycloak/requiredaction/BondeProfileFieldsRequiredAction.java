@@ -70,6 +70,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         
         // Pega os valores enviados pelo formulário
         String firstName = formData.getFirst("firstName");
+        String lastName = formData.getFirst("lastName");
         String birthday = formData.getFirst("birthday");
         String identification = formData.getFirst("identification");
         String state = formData.getFirst("state");
@@ -79,6 +80,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         
         // Validação
         String firstNameError = null;
+        String lastNameError = null;
         String birthdayError = null;
         String identificationError = null;
         String stateError = null;
@@ -86,7 +88,12 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         boolean hasError = false;
         
         if (firstName == null || firstName.trim().isEmpty()) {
-            firstNameError = "Nome completo é obrigatório";
+            firstNameError = "Nome é obrigatório";
+            hasError = true;
+        }
+
+        if (lastName == null || lastName.trim().isEmpty()) {
+            lastNameError = "Sobrenome é obrigatório";
             hasError = true;
         }
         
@@ -120,6 +127,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
             // Recria o formulário com erros
             Response challenge = context.form()
                 .setAttribute("firstName", firstName != null ? firstName : "")
+                .setAttribute("lastName", lastName != null ? lastName : "")
                 .setAttribute("birthday", birthday != null ? birthday : "")
                 .setAttribute("identification", identification != null ? identification : "")
                 .setAttribute("state", state != null ? state : "")
@@ -127,6 +135,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
                 .setAttribute("allowMemberMessages", allowMemberMessages != null ? "true" : "false")
                 .setAttribute("showProfileDirectory", showProfileDirectory != null ? "true" : "false")
                 .setAttribute("firstNameError", firstNameError != null ? firstNameError : "")
+                .setAttribute("lastNameError", lastNameError != null ? lastNameError : "")
                 .setAttribute("birthdayError", birthdayError != null ? birthdayError : "")
                 .setAttribute("identificationError", identificationError != null ? identificationError : "")
                 .setAttribute("stateError", stateError != null ? stateError : "")
@@ -138,6 +147,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         
         // Salva os dados no usuário
         user.setFirstName(firstName.trim());
+        user.setLastName(lastName.trim());
         
         if (birthday != null && !birthday.trim().isEmpty()) {
             logger.debugf("DATA DE NASCIMENTO ANTES DO SET %s", birthday);
