@@ -104,14 +104,22 @@
     options=[] 
     selectedValues=[]
     required=false
+    error=""
     helpText="">
 
     <div class="${properties.kcFormGroupClass!}">
         <#if label?has_content>
+            <#if error?has_content><div class="label-error"></#if>
             <label class="${properties.kcLabelClass!}">
                 ${label}
                 <#if required><span class="required">*</span></#if>
             </label>
+            <#if error?has_content>
+                <span id="input-error-${name}" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
+                    ${kcSanitize(error)?no_esc}
+                </span>
+            </#if>
+            <#if error?has_content></div></#if>
         </#if>
         
         <#if helpText?has_content>

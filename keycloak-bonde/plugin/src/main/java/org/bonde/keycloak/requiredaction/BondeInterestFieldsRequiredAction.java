@@ -47,7 +47,6 @@ public class BondeInterestFieldsRequiredAction implements RequiredActionProvider
         List<String> interests = user.getAttributes().get("interests");
         
         // Cria o formulário com os dados atuais
-        logger.debugf("THEMES %s", themes);
         Response challenge = context.form()
             .setAttribute("themes", themes != null ? themes : Collections.emptyList())
             .setAttribute("interests", interests != null ? interests : Collections.emptyList())
@@ -89,14 +88,27 @@ public class BondeInterestFieldsRequiredAction implements RequiredActionProvider
         List<String> interestsParam = context.getHttpRequest().getDecodedFormParameters().get("interests");
         
         // Valida se algo foi selecionado
-        if ((themesParam == null || themesParam.isEmpty()) && 
-            (interestsParam == null || interestsParam.isEmpty())) {
-            
+        Boolean hasError = false;
+        String themesError = null;
+        String interestsError = null;
+
+        if ((themesParam == null || themesParam.isEmpty()) || themesParam.size() < 3) {
+            themesError = "Selecione pelo menos 3 temas";
+            hasError = true;
+        }
+
+        if ((interestsParam == null || interestsParam.isEmpty())) {
+            interestsError = "Selecione pelo menos um interesse";
+            hasError = true;
+        }
+
+        if (hasError) {
             // Recria o formulário com erro
             Response challenge = context.form()
-                .setError("Selecione pelo menos um tema ou interesse")
-                .setAttribute("themes", Collections.emptyList())
-                .setAttribute("interests", Collections.emptyList())
+                .setAttribute("themes", themesParam)
+                .setAttribute("themesError", themesError)
+                .setAttribute("interests", interestsParam)
+                .setAttribute("interestsError", interestsError)
                 .createForm("interest-fields.ftl");
             context.challenge(challenge);
             return;

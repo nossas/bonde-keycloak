@@ -1,6 +1,6 @@
 <#import "template.ftl" as layout>
 <#import "forms.ftl" as forms>
-<@layout.registrationLayout displayInfo=false; section>
+<@layout.registrationLayout displayInfo=false displayMessage=false; section>
 
     <#if section = "header">
         Como você quer participar?
@@ -10,16 +10,18 @@
         <form id="kc-profile-form" action="${url.loginAction}" method="post">
             
             <#-- Mensagem global de erro/sucesso -->
-            <#if message?has_content && message.summary?has_content>
+            <#-- <#if message?has_content && message.summary?has_content>
                 <@forms.alert 
                     type="${message.type!'info'}" 
                     message="${message.summary}" />
-            </#if>
+            </#if> -->
             
             <@forms.checkboxGroup
                 name="themes"
                 label="Temas de interesse"
                 helpText="Escolha até 3 temas para aprimorar sua experiência."
+                error=themesError
+                required=true
                 selectedValues=themes
                 options=[
                     {"label": "🌱 Clima e meio ambiente", "value": "clima_meio_ambiente"},
@@ -37,10 +39,14 @@
                 ]
             />
 
+            <hr />
+
             <@forms.checkboxGroup
                 name="interests"
                 label="Como você quer participar?"
                 helpText="Escolha formas de participação que fazem sentido para você dentro do BONDE."
+                error=interestsError
+                required=true
                 selectedValues=interests
                 options=[
                     {"label": "Quero aprender", "description": "Formação, conteúdos, aulas e materiais de aprofundamento teórico e prático.", "value": "aprender"},
