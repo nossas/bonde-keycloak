@@ -63,8 +63,39 @@ body {
     border-bottom-width: 1px;
 }
 
+.pf-c-form-control[aria-invalid=true] {
+    --pf-c-form-control--BorderBottomColor: var(--pf-c-form-control--invalid--BorderBottomColor);
+    --pf-c-form-control--BorderTopColor: var(--pf-c-form-control--invalid--BorderBottomColor);
+    --pf-c-form-control--BorderLeftColor: var(--pf-c-form-control--invalid--BorderBottomColor);
+    --pf-c-form-control--BorderRightColor: var(--pf-c-form-control--invalid--BorderBottomColor);
+}
+
+.pf-c-form-control[aria-invalid=true] + .pf-c-button {
+    --pf-c-button--after--BorderColor: var(--pf-global--danger-color--100);
+}
+
+.pf-c-form-control:hover + .pf-c-button,
+.pf-c-form-control:focus + .pf-c-button,
+.pf-c-form-control:focus-visible + .pf-c-button {
+    --pf-c-button--after--BorderColor: var(--pf-global--Color--dark-100);
+}
+
 .checkbox-group {
     margin: 40px 0;
+}
+
+.label-error {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#kc-form-buttons a.pf-m-secondary:hover {
+    color: var(--pf-global--Color--dark-100) !important;
+}
+
+#kc-form-buttons a::after {
+    border-radius: 80px;
 }
 
 .pf-c-switch {
@@ -186,6 +217,8 @@ body {
     border: 1px solid #000;
     margin-top: 12px;
 }
+
+
 
 /* Patternfly CSS places a "bg-login.jpg" as the background on this ".login-pf" class.
    This clashes with the "keycloak-bg.png' background defined on the body below.
@@ -689,6 +722,9 @@ ul#kc-totp-supported-apps {
 
 #kc-form-buttons {
     margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .login-pf-page .login-pf-brand {

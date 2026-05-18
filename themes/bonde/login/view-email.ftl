@@ -19,10 +19,11 @@
         <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">
           <button
             type="submit"
-            class="${properties.kcButtonClass!} ${properties.kcButtonDefaultClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}"
+            class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}"
           >
             ${msg("doResend")}
           </button>
+          <a id="reset-login" href="${url.loginRestartFlowUrl}" aria-label="${msg("restartLoginTooltip")}" class="view-email-reset-login pf-c-button pf-m-secondary pf-m-block btn-lg">« Reiniciar login</a>
         </div>
       </div>
     </form>
