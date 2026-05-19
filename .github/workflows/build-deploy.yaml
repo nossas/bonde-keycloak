@@ -2,12 +2,17 @@ name: Build and Deploy Keycloak
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feature/** ]
     paths:
       - 'themes/**'
       - 'Dockerfile'
   pull_request:
-    branches: [ main ]
+    branches: [ main, feature/** ]
+  workflow_run:
+    workflows: ["Build Java Provider Keycloak"]
+    types:
+      - completed
+    branches: [main]
 
 jobs:
   build-and-test:
@@ -16,6 +21,48 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Download plugin artifact from previous workflow
+      if: github.event_name == 'workflow_run'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: ${{ github.event.workflow_run.id }},
+          });
+          
+          const providerArtifact = artifacts.data.artifacts.find(
+            artifact => artifact.name === 'keycloak-bonde-plugin'
+          );
+          
+          if (providerArtifact) {
+            const download = await github.rest.actions.downloadArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: providerArtifact.id,
+              archive_format: 'zip',
+            });
+            
+            const fs = require('fs');
+            fs.writeFileSync('plugin.zip', Buffer.from(download.data));
+            
+            const { exec } = require('child_process');
+            exec('unzip plugin.zip -d providers/', (error) => {
+              if (error) throw error;
+              console.log('Plugin extracted to providers/ directory');
+            });
+          } else {
+            throw new Error('Plugin artifact not found');
+          }
+
+    - name: Download plugin artifact (from current run - for testing)
+      if: github.event_name != 'workflow_run'
+      uses: actions/download-artifact@v4
+      with:
+        name: keycloak-bonde-plugin
+        path: ./providers
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -28,15 +75,26 @@ jobs:
 
     - name: Extract metadata (tags, labels) for Docker
       id: meta
-      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      uses: docker/metadata-action@v5
       with:
         images: nossas/bonde-keycloak
+        tags: |
+          type=raw,value=latest
+          type=sha,prefix={{date 'YYYYMMDD'}}-
+          type=raw,value={{date 'YYYYMMDD'}}-{{sha}}
 
-    - name: Build and push Docker image "nossas/bonde-keycloak"
-      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+    - name: List providers directory (debug)
+      run: |
+        echo "Providers directory contents:"
+        ls -la providers/ || echo "No providers directory"
+        mkdir -p providers
+        ls -la providers/ || echo "Still no files"
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
       with:
         context: ./
         file: Dockerfile
-        push: true
+        push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
