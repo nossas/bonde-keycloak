@@ -45,11 +45,23 @@ public class BondeInterestFieldsRequiredAction implements RequiredActionProvider
         // Recupera os atributos de interesse do usuário
         List<String> themes = user.getAttributes().get("themes");
         List<String> interests = user.getAttributes().get("interests");
-        
+        String participationFrequency = user.getFirstAttribute("participationFrequency") != null ?
+                                        user.getFirstAttribute("participationFrequency") : "";
+        String termsAccepted = user.getFirstAttribute("termsAccepted") != null ?
+                               user.getFirstAttribute("termsAccepted") : "off";
+        String privacyPolicyAccepted = user.getFirstAttribute("privacyPolicyAccepted") != null ?
+                                       user.getFirstAttribute("privacyPolicyAccepted") : "off";
+        String marketingCommsAccepted = user.getFirstAttribute("marketingCommsAccepted") != null ?
+                                        user.getFirstAttribute("marketingCommsAccepted") : "off";
+
         // Cria o formulário com os dados atuais
         Response challenge = context.form()
             .setAttribute("themes", themes != null ? themes : Collections.emptyList())
             .setAttribute("interests", interests != null ? interests : Collections.emptyList())
+            .setAttribute("participationFrequency", participationFrequency)
+            .setAttribute("termsAccepted", termsAccepted)
+            .setAttribute("privacyPolicyAccepted", privacyPolicyAccepted)
+            .setAttribute("marketingCommsAccepted", marketingCommsAccepted)
             .createForm("interest-fields.ftl");
         
         context.challenge(challenge);
@@ -86,14 +98,24 @@ public class BondeInterestFieldsRequiredAction implements RequiredActionProvider
         // Pega os parâmetros do formulário
         List<String> themesParam = context.getHttpRequest().getDecodedFormParameters().get("themes");
         List<String> interestsParam = context.getHttpRequest().getDecodedFormParameters().get("interests");
-        
+        String participationFrequencyParam = context.getHttpRequest().getDecodedFormParameters().getFirst("participationFrequency");
+        String termsAcceptedParam = context.getHttpRequest().getDecodedFormParameters().getFirst("termsAccepted");
+        String privacyPolicyAcceptedParam = context.getHttpRequest().getDecodedFormParameters().getFirst("privacyPolicyAccepted");
+        String marketingCommsAcceptedParam = context.getHttpRequest().getDecodedFormParameters().getFirst("marketingCommsAccepted");
+
         // Valida se algo foi selecionado
         Boolean hasError = false;
         String themesError = null;
         String interestsError = null;
+        String participationFrequencyError = null;
+        String termsAcceptedError = null;
+        String privacyPolicyAcceptedError = null;
 
         if ((themesParam == null || themesParam.isEmpty()) || themesParam.size() < 3) {
             themesError = "Selecione pelo menos 3 temas";
+            hasError = true;
+        } else if (themesParam.size() > 3) {
+            themesError = "Selecione no máximo 3 temas";
             hasError = true;
         }
 
@@ -102,13 +124,35 @@ public class BondeInterestFieldsRequiredAction implements RequiredActionProvider
             hasError = true;
         }
 
+        if (participationFrequencyParam == null || participationFrequencyParam.trim().isEmpty()) {
+            participationFrequencyError = "Selecione uma opção";
+            hasError = true;
+        }
+
+        if (!"on".equals(termsAcceptedParam)) {
+            termsAcceptedError = "Você precisa aceitar o Termo de Adesão para continuar";
+            hasError = true;
+        }
+
+        if (!"on".equals(privacyPolicyAcceptedParam)) {
+            privacyPolicyAcceptedError = "Você precisa aceitar a Política de Privacidade para continuar";
+            hasError = true;
+        }
+
         if (hasError) {
             // Recria o formulário com erro
             Response challenge = context.form()
-                .setAttribute("themes", themesParam)
+                .setAttribute("themes", themesParam != null ? themesParam : Collections.emptyList())
                 .setAttribute("themesError", themesError)
-                .setAttribute("interests", interestsParam)
+                .setAttribute("interests", interestsParam != null ? interestsParam : Collections.emptyList())
                 .setAttribute("interestsError", interestsError)
+                .setAttribute("participationFrequency", participationFrequencyParam != null ? participationFrequencyParam : "")
+                .setAttribute("participationFrequencyError", participationFrequencyError)
+                .setAttribute("termsAccepted", termsAcceptedParam != null ? termsAcceptedParam : "off")
+                .setAttribute("termsAcceptedError", termsAcceptedError)
+                .setAttribute("privacyPolicyAccepted", privacyPolicyAcceptedParam != null ? privacyPolicyAcceptedParam : "off")
+                .setAttribute("privacyPolicyAcceptedError", privacyPolicyAcceptedError)
+                .setAttribute("marketingCommsAccepted", marketingCommsAcceptedParam != null ? marketingCommsAcceptedParam : "off")
                 .createForm("interest-fields.ftl");
             context.challenge(challenge);
             return;
@@ -127,7 +171,19 @@ public class BondeInterestFieldsRequiredAction implements RequiredActionProvider
         } else {
             user.removeAttribute("interests");
         }
-        
+
+        // Salva a frequência de participação
+        if (participationFrequencyParam != null && !participationFrequencyParam.trim().isEmpty()) {
+            user.setSingleAttribute("participationFrequency", participationFrequencyParam);
+        } else {
+            user.removeAttribute("participationFrequency");
+        }
+
+        // Salva a aceitação dos termos
+        user.setSingleAttribute("termsAccepted", termsAcceptedParam);
+        user.setSingleAttribute("privacyPolicyAccepted", privacyPolicyAcceptedParam);
+        user.setSingleAttribute("marketingCommsAccepted", marketingCommsAcceptedParam != null ? marketingCommsAcceptedParam : "off");
+
         // Remove a required action após completar
         user.removeRequiredAction(PROVIDER_ID);
         

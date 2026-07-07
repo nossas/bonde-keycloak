@@ -1,0 +1,4 @@
+/app/plugin/src/main/java/org/bonde/keycloak/requiredaction/BondeInterestFieldsRequiredAction.java
+/app/plugin/src/main/java/org/bonde/keycloak/requiredaction/BondeProfileFieldsRequiredAction.java
+/app/plugin/src/main/java/org/bonde/keycloak/requiredaction/BondeInterestFieldsRequiredActionFactory.java
+/app/plugin/src/main/java/org/bonde/keycloak/requiredaction/BondeProfileFieldsRequiredActionFactory.java

@@ -1,0 +1,4 @@
+org/bonde/keycloak/requiredaction/BondeProfileFieldsRequiredAction.class
+org/bonde/keycloak/requiredaction/BondeInterestFieldsRequiredActionFactory.class
+org/bonde/keycloak/requiredaction/BondeInterestFieldsRequiredAction.class
+org/bonde/keycloak/requiredaction/BondeProfileFieldsRequiredActionFactory.class

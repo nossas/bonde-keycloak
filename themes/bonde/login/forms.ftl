@@ -76,23 +76,34 @@
     Macro para checkbox seguindo PatternFly
     Usa a estrutura dos checkboxes nos formulários nativos
 -->
-<#macro checkbox 
-    name 
-    label 
-    value="">
+<#macro checkbox
+    name
+    label
+    value=""
+    required=false
+    error="">
 
     <label class="pf-c-switch" for="${name}">
         <input
             class="pf-c-switch__input"
             type="checkbox"
-            id="${name}" 
+            id="${name}"
             name="${name}"
+            value="on"
             <#if value == "on">checked</#if>
+            <#if required>required</#if>
+            aria-invalid="<#if error?has_content>true<#else>false</#if>"
         />
 
         <span class="pf-c-switch__toggle"></span>
-        <span class="pf-c-switch__text">${label}</span>
+        <span class="pf-c-switch__text">${kcSanitize(label)?no_esc}</span>
     </label>
+
+    <#if error?has_content>
+        <span id="input-error-${name}" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
+            ${kcSanitize(error)?no_esc}
+        </span>
+    </#if>
 </#macro>
 
 <#-- 
@@ -157,7 +168,70 @@
     </div>
 </#macro>
 
-<#-- 
+<#--
+    Macro para grupo de radios (opção única), mesmo visual do checkboxGroup
+-->
+<#macro radioGroup
+    name
+    label=""
+    options=[]
+    selectedValue=""
+    required=false
+    error=""
+    helpText="">
+
+    <div class="${properties.kcFormGroupClass!}">
+        <#if label?has_content>
+            <#if error?has_content><div class="label-error"></#if>
+            <label class="${properties.kcLabelClass!}">
+                ${label}
+                <#if required><span class="required">*</span></#if>
+            </label>
+            <#if error?has_content>
+                <span id="input-error-${name}" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
+                    ${kcSanitize(error)?no_esc}
+                </span>
+            </#if>
+            <#if error?has_content></div></#if>
+        </#if>
+
+        <#if helpText?has_content>
+            <div class="pf-c-helper-text">
+                <div class="pf-c-helper-text__item">
+                    <span class="pf-c-helper-text__item-text">${kcSanitize(helpText)?no_esc}</span>
+                </div>
+            </div>
+        </#if>
+
+        <div class="pf-c-toggle-group" role="radiogroup" aria-label="${label}">
+            <#list options as option>
+                <#local isChecked = (selectedValue!'') == option.value />
+                <div class="pf-c-toggle-group__item">
+                    <input class="pf-c-toggle-group__input"
+                        type="radio"
+                        id="${name}-${option.value}"
+                        name="${name}"
+                        value="${option.value}"
+                        ${isChecked?then('checked', '')}
+                        <#if required>required</#if>>
+                    <label class="pf-c-toggle-group__button" for="${name}-${option.value}">
+                        <span class="pf-c-toggle-group__text">
+                            <#if option.icon??>
+                                <i class="${option.icon}" aria-hidden="true"></i>
+                            </#if>
+                            ${option.label}
+                        </span>
+                        <#if option.description?has_content>
+                            <span class="pf-c-toggle-group__description">${option.description}</span>
+                        </#if>
+                    </label>
+                </div>
+            </#list>
+        </div>
+    </div>
+</#macro>
+
+<#--
     Macro para alertas/mensagens (PatternFly alert)
 -->
 <#macro alert type="info" message="">
