@@ -37,7 +37,7 @@
             display: inline-block;
             padding: 12px 30px;
             background-color: #FF6B35;
-            color: #ffffff;
+            color: #ffffff !important;
             text-decoration: none;
             border-radius: 4px;
             font-weight: bold;
