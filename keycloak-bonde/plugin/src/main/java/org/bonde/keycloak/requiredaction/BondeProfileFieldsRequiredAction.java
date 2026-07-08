@@ -35,9 +35,11 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         
         String birthday = user.getFirstAttribute("birthday") != null ? 
                              user.getFirstAttribute("birthday") : "";
-        String identification = user.getFirstAttribute("identification") != null ? 
+        String identification = user.getFirstAttribute("identification") != null ?
                                 user.getFirstAttribute("identification") : "";
-        String state = user.getFirstAttribute("state") != null ? 
+        String raceColor = user.getFirstAttribute("raceColor") != null ?
+                           user.getFirstAttribute("raceColor") : "";
+        String state = user.getFirstAttribute("state") != null ?
                        user.getFirstAttribute("state") : "";
         String city = user.getFirstAttribute("city") != null ? 
                       user.getFirstAttribute("city") : "";
@@ -52,6 +54,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
             .setAttribute("lastName", lastName)
             .setAttribute("birthday", birthday)
             .setAttribute("identification", identification)
+            .setAttribute("raceColor", raceColor)
             .setAttribute("state", state)
             .setAttribute("city", city)
             .setAttribute("allowMemberMessages", allowMemberMessages)
@@ -73,6 +76,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         String lastName = formData.getFirst("lastName");
         String birthday = formData.getFirst("birthday");
         String identification = formData.getFirst("identification");
+        String raceColor = formData.getFirst("raceColor");
         String state = formData.getFirst("state");
         String city = formData.getFirst("city");
         String allowMemberMessages = formData.getFirst("allowMemberMessages");
@@ -83,6 +87,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         String lastNameError = null;
         String birthdayError = null;
         String identificationError = null;
+        String raceColorError = null;
         String stateError = null;
         String cityError = null;
         boolean hasError = false;
@@ -112,7 +117,12 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
             identificationError = "Como você se identifica é obrigatório";
             hasError = true;
         }
-        
+
+        if (raceColor == null || raceColor.trim().isEmpty()) {
+            raceColorError = "Como você se identifica em relação à sua raça/cor é obrigatório";
+            hasError = true;
+        }
+
         if (state == null || state.trim().isEmpty()) {
             stateError = "Estado é obrigatório";
             hasError = true;
@@ -130,6 +140,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
                 .setAttribute("lastName", lastName != null ? lastName : "")
                 .setAttribute("birthday", birthday != null ? birthday : "")
                 .setAttribute("identification", identification != null ? identification : "")
+                .setAttribute("raceColor", raceColor != null ? raceColor : "")
                 .setAttribute("state", state != null ? state : "")
                 .setAttribute("city", city != null ? city : "")
                 .setAttribute("allowMemberMessages", allowMemberMessages != null ? "true" : "false")
@@ -138,6 +149,7 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
                 .setAttribute("lastNameError", lastNameError != null ? lastNameError : "")
                 .setAttribute("birthdayError", birthdayError != null ? birthdayError : "")
                 .setAttribute("identificationError", identificationError != null ? identificationError : "")
+                .setAttribute("raceColorError", raceColorError != null ? raceColorError : "")
                 .setAttribute("stateError", stateError != null ? stateError : "")
                 .setAttribute("cityError", cityError != null ? cityError : "")
                 .createForm("profile-fields.ftl");
@@ -157,7 +169,11 @@ public class BondeProfileFieldsRequiredAction implements RequiredActionProvider 
         if (identification != null && !identification.trim().isEmpty()) {
             user.setSingleAttribute("identification", identification);
         }
-        
+
+        if (raceColor != null && !raceColor.trim().isEmpty()) {
+            user.setSingleAttribute("raceColor", raceColor);
+        }
+
         if (state != null && !state.trim().isEmpty()) {
             user.setSingleAttribute("state", state);
         }
