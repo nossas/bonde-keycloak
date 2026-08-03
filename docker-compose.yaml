@@ -37,6 +37,12 @@ services:
       KC_MAIL_PORT: 1025
       KC_MAIL_FROM: noreply@bonde.org
       KC_MAIL_FROM_DISPLAY_NAME: Bonde
+
+      # Webhook do n8n disparado quando um usuário é habilitado/desabilitado (bonde-disable-webhook
+      # event listener). Precisa ser habilitado em Realm Settings > Events > Event
+      # listeners no Admin Console. Valores reais ficam no .env (gitignorado, veja .env.example).
+      KC_SPI_EVENTS_LISTENER_BONDE_DISABLE_WEBHOOK_WEBHOOK_URL: ${BONDE_DISABLE_WEBHOOK_URL:-}
+      KC_SPI_EVENTS_LISTENER_BONDE_DISABLE_WEBHOOK_WEBHOOK_SECRET: ${BONDE_DISABLE_WEBHOOK_SECRET:-}
     ports:
       - "8181:8080"
     volumes:
