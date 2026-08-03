@@ -91,8 +91,7 @@ jobs:
       with:
         context: ./
         file: Dockerfile
-        # push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        push: true
+        push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
